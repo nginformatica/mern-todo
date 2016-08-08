@@ -1,0 +1,23 @@
+{
+  "name": "mern-todo",
+  "version": "0.0.0",
+  "description": "Sample TODO app following the MERN architecture.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cuchi/mern-todo.git"
+  },
+  "author": "Paulo Henrique Cuchi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cuchi/mern-todo/issues"
+  },
+  "homepage": "https://github.com/cuchi/mern-todo#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "mongoose": "^4.5.8"
+  }
+}
