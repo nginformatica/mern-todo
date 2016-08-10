@@ -2,10 +2,10 @@
   "name": "mern-todo",
   "version": "0.0.0",
   "description": "Sample TODO app following the MERN architecture.",
-  "main": "app.js",
+  "main": "./src/app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./src/app.js",
+    "test": "xo"
   },
   "repository": {
     "type": "git",
@@ -18,8 +18,25 @@
   },
   "homepage": "https://github.com/cuchi/mern-todo#readme",
   "dependencies": {
+    "bluebird": "^3.4.1",
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "mongoose": "^4.5.8",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "node-jslint": "^0.1.1",
+    "xo": "^0.16.0"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.30.0"
+  },
+  "xo": {
+    "esnext": true,
+    "space": true,
+    "rules": {
+      "xo/filename-case": [
+        "error",
+        "camelCase"
+      ]
+    }
   }
 }
