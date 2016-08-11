@@ -9,4 +9,5 @@ Because it needs to be small and yet show some nice perspective of what MERN sta
 - **Express** *with body-parser & morgan* for the HTTP API
 - **BlueBird** because promises are awesome
 - **Xo** to keep the code clean
+
 *Work in progress*! there is a lot of good stuff to put in this list.
