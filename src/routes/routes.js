@@ -3,8 +3,12 @@ const taskService = require('../taskService');
 
 const router = new express.Router();
 
-router.get('/tasks/', (req, res) => {
-  taskService.findByName(/* TODO */);
+router.get('/tasks/:id', (req, res) => {
+  taskService.find(req.params.id, res);
+});
+
+router.get('/tasks/find/:summary', (req, res) => {
+  taskService.findBySummary(req.params.summary, res);
 });
 
 router.post('/tasks/', (req, res) => {
