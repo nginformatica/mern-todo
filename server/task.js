@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongodb from 'mongoose';
 
-const taskSchema = new mongoose.Schema({
+export default mongodb.model('Task', new mongodb.Schema({
   summary: {
     type: String,
     required: [true, 'Summary is required!']
@@ -10,6 +10,4 @@ const taskSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-});
-
-module.exports = taskSchema;
+}));

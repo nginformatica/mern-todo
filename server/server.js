@@ -1,8 +1,8 @@
-const express = require('express');
-const logger = require('morgan');
-const bodyParser = require('body-parser');
-const database = require('./database');
-const appRoutes = require('./routes/routes');
+import express from 'express';
+import logger from 'morgan';
+import bodyParser from 'body-parser';
+import * as database from './database';
+import apiRoutes from './api';
 
 const app = express();
 const PORT = 8000;
@@ -18,8 +18,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-// Application routes
-app.use(appRoutes);
+// Application API
+app.use('/api', apiRoutes);
 
 // Did not match any method, show a 404 error...
 app.use((req, res) => {

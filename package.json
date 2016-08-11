@@ -4,7 +4,7 @@
   "description": "Sample To-Do app using the MERN stack.",
   "main": "./src/app.js",
   "scripts": {
-    "start": "node ./src/app.js",
+    "start": "babel-node ./server/server.js",
     "test": "xo"
   },
   "repository": {
@@ -22,7 +22,8 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "mongoose": "^4.5.8",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "node-babel": "^0.1.2"
   },
   "devDependencies": {
     "xo": "^0.16.0"
@@ -31,8 +32,12 @@
     "esnext": true,
     "space": true,
     "rules": {
-      "xo/filename-case": ["error","camelCase"],
-      "xo/no-process-exit": ["off"]
+      "xo/no-process-exit": [
+        "off"
+      ]
     }
+  },
+  "babel": {
+    "presets": ["es2015"]
   }
 }
