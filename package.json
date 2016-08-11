@@ -1,7 +1,7 @@
 {
   "name": "mern-todo",
   "version": "0.0.0",
-  "description": "Sample TODO app following the MERN architecture.",
+  "description": "Sample To-Do app using the MERN stack.",
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
@@ -22,12 +22,10 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "mongoose": "^4.5.8",
-    "morgan": "^1.7.0",
-    "node-jslint": "^0.1.1",
-    "xo": "^0.16.0"
+    "morgan": "^1.7.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.30.0"
+    "xo": "^0.16.0"
   },
   "xo": {
     "esnext": true,
