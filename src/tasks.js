@@ -14,10 +14,10 @@ module.exports = {
 
   findAll: response => {
     taskModel.find()
-    .select('summary description due').exec()
-    .then(tasks => {
-      response.status(200).send(tasks);
-    });
+      .select('summary description due').exec()
+      .then(tasks => {
+        response.status(200).send(tasks);
+      });
   },
 
   findById: (id, response) => {
