@@ -31,10 +31,8 @@
     "esnext": true,
     "space": true,
     "rules": {
-      "xo/filename-case": [
-        "error",
-        "camelCase"
-      ]
+      "xo/filename-case": ["error","camelCase"],
+      "xo/no-process-exit": ["off"]
     }
   }
 }
