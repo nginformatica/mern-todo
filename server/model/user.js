@@ -11,8 +11,8 @@ export default mongodb.model('User', new mongodb.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Password is required!']
+    required: [true, 'Password is required!'],
     minlength: [4, 'Password is too short!']
   },
   created: Date
-});
+}));
