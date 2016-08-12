@@ -23,7 +23,8 @@
     "express": "^4.14.0",
     "mongoose": "^4.5.8",
     "morgan": "^1.7.0",
-    "node-babel": "^0.1.2"
+    "node-babel": "^0.1.2",
+    "passport": "^0.3.2"
   },
   "devDependencies": {
     "xo": "^0.16.0"
@@ -38,6 +39,8 @@
     }
   },
   "babel": {
-    "presets": ["es2015"]
+    "presets": [
+      "es2015"
+    ]
   }
 }
