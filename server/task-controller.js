@@ -1,4 +1,4 @@
-import TaskModel from './task';
+import TaskModel from './model/task';
 
 function searchRegex(value) {
   return new RegExp('.*' + value + '.*', 'i');
