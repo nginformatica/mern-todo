@@ -1,3 +1,4 @@
+import express from 'express';
 import * as users from '../user-controller';
 
 const router = new express.Router();
