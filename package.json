@@ -31,11 +31,10 @@
   },
   "xo": {
     "esnext": true,
-    "space": true,
+    "space": 4,
     "rules": {
-      "xo/no-process-exit": [
-        "off"
-      ]
+      "xo/no-process-exit": ["off"],
+      "babel/object-curly-spacing": ["error", "always"]
     }
   },
   "babel": {
