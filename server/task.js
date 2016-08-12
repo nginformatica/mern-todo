@@ -6,6 +6,10 @@ export default mongodb.model('Task', new mongodb.Schema({
     required: [true, 'Summary is required!']
   },
   description: String,
+  isDone: {
+    type: Boolean,
+    default: false
+  },
   due: {
     type: Date,
     default: Date.now

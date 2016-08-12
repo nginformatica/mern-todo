@@ -3,9 +3,9 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import * as database from './database';
 import apiRoutes from './api';
+import config from './config';
 
 const app = express();
-const PORT = 8000;
 
 database.connect();
 
@@ -26,6 +26,6 @@ app.use((req, res) => {
   res.status(404).send('Page not found!');
 });
 
-app.listen(PORT, () => {
-  console.log('Listening on port ' + PORT + '...');
+app.listen(config.port, () => {
+  console.log('Listening on port ' + config.port + '...');
 });

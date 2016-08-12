@@ -1,23 +1,22 @@
 import mongodb from 'mongoose';
 import bluebird from 'bluebird';
-
-const databaseURL = 'mongodb://localhost:27017/test';
+import config from './config';
 
 mongodb.Promise = bluebird;
 
 export function connect() {
-  mongodb.connect(databaseURL);
+  mongodb.connect(config.mongoUri);
 
   mongodb.connection.on('connected', () => {
-    console.log('Connected successfully to ' + databaseURL);
+    console.log('Connected successfully to ' + config.mongoUri);
   });
 
   mongodb.connection.on('error', () => {
-    console.log('Failed to connect to ' + databaseURL);
+    console.log('Failed to connect to ' + config.mongoUri);
   });
 
   mongodb.connection.on('disconnected', () => {
-    console.log('Disconnected from ' + databaseURL);
+    console.log('Disconnected from ' + config.mongoUri);
   });
 
   process.on('SIGINT', () => {
