@@ -2,9 +2,9 @@ import mongodb from 'mongoose';
 import bluebird from 'bluebird';
 import config from '../config';
 
-mongodb.Promise = bluebird;
-
 export function connect() {
+    mongodb.Promise = bluebird;
+
     mongodb.connect(config.mongoUri);
 
     mongodb.connection.on('connected', () => {

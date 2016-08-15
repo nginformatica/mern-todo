@@ -3,7 +3,7 @@ import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import * as database from './model/database';
-import apiRoutes from './routes/api';
+import * as api from './routes/api';
 import config from './config';
 
 const app = express();
@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Application API
-app.use('/api', apiRoutes);
+app.use('/api', api.getRoutes());
 
 // Static font-end content
 app.use(express.static(path.join(__dirname, '/public')));
