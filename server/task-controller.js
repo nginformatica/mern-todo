@@ -24,7 +24,7 @@ export function findById(id, response) {
 
 export function findBySummary(summary, response) {
     TaskModel.find({ summary: searchRegex(summary) })
-        .select('summary description due').exec()
+        .select('summary description isDone due').exec()
         .then(() => {
             response.status(200).send();
         }, error => {
