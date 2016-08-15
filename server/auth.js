@@ -4,7 +4,8 @@ import UserModel from './model/user';
 
 export function initialize() {
     passport.use(new Strategy({
-        usernameField: 'email', passwordField: 'password'
+        usernameField: 'email', 
+        passwordField: 'password'
     }, (email, password, done) => {
         UserModel.findOne({ email, password }).exec()
             .then(user => {
