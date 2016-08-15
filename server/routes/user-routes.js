@@ -8,10 +8,6 @@ export function getRoutes() {
         users.create(req.body, res);
     });
 
-    router.post('/login', (req, res) => {
-        users.attemptLogin(req.body, res);
-    });
-
     return router;
 }
 

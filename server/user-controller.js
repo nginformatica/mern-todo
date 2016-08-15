@@ -9,7 +9,3 @@ export function create(user, response) {
             response.status(400).send(error.toString());
         });
 }
-
-export function attemptLogin(loginInformation, response) {
-    response.status(200).send();
-}

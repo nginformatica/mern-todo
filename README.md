@@ -5,9 +5,10 @@ This is a simple example of a Node.js application using the MERN stack (like MEA
 Because it needs to be small and yet show some nice perspective of what MERN stack is about.
 
 ### What am I using?
-- **MongoDB** *via Mongoose* for storing data
-- **Express** *with body-parser & morgan* for the HTTP API
+- **MongoDB** *via Mongoose*: data storage
+- **Express** *with body-parser & morgan*: RESTful API
 - **BlueBird** because promises are awesome
+- **Passport**: user authentication
 - **Xo** to keep the code clean
 
 *Work in progress*! there is a lot of good stuff to put in this list.
