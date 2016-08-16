@@ -10,5 +10,6 @@ Because it needs to be small and yet show some nice perspective of what MERN sta
 - **BlueBird** because promises are awesome
 - **Passport**: user authentication
 - **Xo** to keep the code clean
+- **Babel**: cutting-edge features of ECMAScript 6
 
 *Work in progress*! there is a lot of good stuff to put in this list.

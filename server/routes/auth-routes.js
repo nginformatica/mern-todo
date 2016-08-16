@@ -5,7 +5,8 @@ export function getRoutes() {
     const router = new express.Router();
 
     router.post('/', passport.authenticate('local', {
-        failureRedirect: '/'
+        failureRedirect: '/',
+        failureFlash: true
     }), (req, res) => {
         res.status(200).send('You logged in!');
     });

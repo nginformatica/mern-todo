@@ -13,5 +13,9 @@ export default mongodb.model('Task', new mongodb.Schema({
     due: {
         type: Date,
         default: Date.now
+    },
+    owner: {
+        type: mongodb.Schema.Types.ObjectId,
+        ref: 'User'
     }
 }));

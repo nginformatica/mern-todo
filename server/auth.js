@@ -4,10 +4,11 @@ import UserModel from './model/user';
 
 export function initialize() {
     passport.use(new Strategy({
-        usernameField: 'email', 
+        usernameField: 'email',
         passwordField: 'password'
     }, (email, password, done) => {
-        UserModel.findOne({ email, password }).exec()
+        UserModel.findOne({ email, password })
+            .select('name email created').exec()
             .then(user => {
                 return done(null, user);
             }, () => {
@@ -20,9 +21,18 @@ export function initialize() {
     });
 
     passport.deserializeUser((id, done) => {
-        UserModel.findOne({ _id: id }).exec()
+        UserModel.findOne({ _id: id })
+            .select('name email created').exec()
             .then(user => {
                 done(null, user);
             });
     });
+}
+
+export function authenticatedMiddleware(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect('/');
+    }
 }

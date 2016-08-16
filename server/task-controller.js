@@ -4,16 +4,16 @@ function searchRegex(value) {
     return new RegExp('.*' + value + '.*', 'i');
 }
 
-export function findAll(response) {
-    TaskModel.find()
+export function findAll(request, response) {
+    TaskModel.find({ owner: request.user._id })
         .select('summary description isDone due').exec()
         .then(tasks => {
             response.status(200).send(tasks);
         });
 }
 
-export function findById(id, response) {
-    TaskModel.findById(id)
+export function findById(request, response) {
+    TaskModel.find({ _id: request.params.id, owner: request.user.id })
         .select('summary description isDone due').exec()
         .then(task => {
             response.status(200).send(task);
@@ -22,17 +22,22 @@ export function findById(id, response) {
         });
 }
 
-export function findBySummary(summary, response) {
-    TaskModel.find({ summary: searchRegex(summary) })
-        .select('summary description isDone due').exec()
-        .then(() => {
-            response.status(200).send();
-        }, error => {
-            response.status(400).send({ message: error.toString() });
+export function findBySummary(request, response) {
+    TaskModel.find({
+        owner: request.user._id,
+        summary: searchRegex(request.params.summary)
+    }).select('summary description isDone due')
+        .exec()
+        .then(task => {
+            response.status(200).send(task);
+        }, () => {
+            response.status(200).send([]);
         });
 }
 
-export function save(task, response) {
+export function save(request, response) {
+    const task = request.body;
+    task.owner = request.user._id;
     new TaskModel(task).save()
         .then(() => {
             response.status(200).send();
@@ -41,8 +46,10 @@ export function save(task, response) {
         });
 }
 
-export function update(task, response) {
-    TaskModel.update({ _id: task._id }, task).exec()
+export function update(request, response) {
+    const task = request.body;
+    TaskModel.update({ _id: task._id, owner: request.user.id }, task)
+        .exec()
         .then(() => {
             response.status(200).send();
         }, error => {
@@ -50,8 +57,9 @@ export function update(task, response) {
         });
 }
 
-export function remove(id, response) {
-    TaskModel.remove({ _id: id }).exec()
+export function remove(request, response) {
+    TaskModel.remove({ _id: request.params.id, owner: request.user.id })
+        .exec()
         .then(() => {
             response.status(200).send();
         }, error => {
