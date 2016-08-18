@@ -1,0 +1,21 @@
+
+.login-paper {
+    width: 300px;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.login-form {
+    padding: 20px 30px;
+    overflow: auto;
+}
+
+.button-bar {
+    display: inline-block;
+    overflow: auto;
+}
+
+.login-button {
+    margin: 10px;
+    float: right;
+}

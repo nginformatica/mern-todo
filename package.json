@@ -7,7 +7,8 @@
     "start": "babel-node ./server/server.js",
     "build": "babel ./server -d ./dist",
     "production": "node ./dist/server.js",
-    "test": "xo"
+    "test": "xo",
+    "clean": "rm -rf node_modules"
   },
   "repository": {
     "type": "git",
@@ -27,13 +28,25 @@
     "morgan": "^1.7.0",
     "passport": "^0.3.2",
     "passport-local": "~1.0.0",
-    "express-session": "~1.14.0"
+    "express-session": "~1.14.0",
+    "react-dom": "~15.3.0",
+    "react-tap-event-plugin": "~1.0.0",
+    "material-ui": "~0.15.4",
+    "react": "~15.3.0",
+    "react-router": "~2.6.1"
   },
   "devDependencies": {
     "xo": "^0.16.0",
     "babel-cli": "~6.11.4",
     "babel-preset-stage-2": "~6.13.0",
-    "babel-preset-es2015": "~6.13.2"
+    "babel-preset-es2015": "~6.13.2",
+    "babel-preset-react": "~6.11.1",
+    "webpack": "~1.13.1",
+    "jsx-loader": "~0.13.2",
+    "babel-core": "~6.13.2",
+    "babel-loader": "~6.2.5",
+    "react-hot-loader": "~1.3.0",
+    "webpack-dev-server": "~1.14.1"
   },
   "xo": {
     "esnext": true,
@@ -50,7 +63,8 @@
   },
   "babel": {
     "presets": [
-      "es2015"
+      "es2015",
+      "react"
     ]
   }
 }
