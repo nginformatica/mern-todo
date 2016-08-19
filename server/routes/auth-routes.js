@@ -4,16 +4,17 @@ import passport from 'passport';
 export function getRoutes() {
     const router = new express.Router();
 
-    router.post('/', passport.authenticate('local', {
-        failureRedirect: '/',
-        failureFlash: true
-    }), (req, res) => {
-        res.status(200).send('You logged in!');
+    router.post('/', passport.authenticate('local'), (req, res) => {
+        res.status(200).send({
+            message: 'You logged in!'
+        });
     });
 
     router.get('/logout', (req, res) => {
         req.logout();
-        res.status(200).send('You logged out!');
+        res.status(200).send({
+            message: 'You logged out!'
+        });
     });
 
     router.get('/whoami', (req, res) => {

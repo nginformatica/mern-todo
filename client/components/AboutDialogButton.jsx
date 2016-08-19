@@ -41,12 +41,12 @@ export default class AboutDialogButton extends React.Component {
                 >
                     <InfoIcon color={ white } />
                 </IconButton>
-                <Dialog 
+                <Dialog
                     title="About"
                     actions={ okayButton }
                     modal={ false }
                     open={ this.state.dialogOpen }
-                    onRequestClose={ this.closeDialog } 
+                    onRequestClose={ this.closeDialog }
                 >
                     Hello!
                 </Dialog>
