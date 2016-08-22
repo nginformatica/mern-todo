@@ -36,10 +36,8 @@ app.use('/api', api.getRoutes());
 
 // Static font-end content
 app.use(express.static(path.join(__dirname, '/public')));
-
-// Did not match anything, then show a 404 error
-app.use((req, res) => {
-    res.status(404).send('Page not found!');
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
 // Starting the server
