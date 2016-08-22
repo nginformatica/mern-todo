@@ -4,11 +4,9 @@ import passport from 'passport';
 export function getRoutes() {
     const router = new express.Router();
 
-    router.post('/', passport.authenticate('local'), (req, res) => {
-        res.status(200).send({
-            message: 'You logged in!'
-        });
-    });
+    router.post('/', passport.authenticate('local', {
+        successRedirect: '/app'
+    }));
 
     router.get('/logout', (req, res) => {
         req.logout();

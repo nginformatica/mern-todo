@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { connect, PromiseState } from 'react-refetch';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
+import LoginConnector from './LoginConnector';
 
 class LoginForm extends Component {
     constructor(props) {
@@ -30,7 +30,7 @@ class LoginForm extends Component {
         this.props.login(this.state);
     }
 
-    getMessageFor(response) {
+    getError(response) {
         if (response && response.settled) {
             if (response.fulfilled) {
                 return response.value;
@@ -43,7 +43,7 @@ class LoginForm extends Component {
     }
 
     render() {
-        const message = this.getMessageFor(this.props.loginResponse);
+        const errorMessage = this.getError(this.props.loginResponse);
 
         return (
             <div className="login-form">
@@ -58,7 +58,7 @@ class LoginForm extends Component {
                     onChange={ this.onPasswordChange }
                     fullWidth={ true }
                 />
-                <span>{ message }</span>
+                <span>{ errorMessage }</span>
                 <RaisedButton 
                     className="login-button" 
                     label="Login" 
@@ -74,18 +74,7 @@ class LoginForm extends Component {
     }
 }
 
-const loginConnector = connect.defaults({
-    handleResponse: response => {
-        const message = response.text();
-        if (response.status >= 200 && response.status < 300) {
-            return 'You logged in!';
-        } else if (response.status === 401) {
-            return Promise.reject('Invalid e-mail or password!');
-        }
-    }
-});
-
-export default loginConnector(props => {
+export default LoginConnector(props => {
     return {
         login: userLogin => ({
             loginResponse: {

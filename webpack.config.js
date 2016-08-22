@@ -2,15 +2,15 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: './client/app.jsx',
+    entry: './client/index.jsx',
     output: {
         path: path.join(__dirname, 'dist/public'),
-        filename: 'app.js'
+        filename: 'index.js'
     },
     module: {
         loaders: [
             { 
-                test: /\.jsx/,
+                test: /\.jsx?$/,
                 loader: 'babel',
                 exclude: /node_modules/,
             }
