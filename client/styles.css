@@ -25,3 +25,11 @@
     margin: 10px;
     float: right;
 }
+
+.date-default {
+    color: rgba(0, 100, 0, 0.7);
+}
+
+.date-late {
+    color: rgba(255, 0, 0, 0.7);
+}

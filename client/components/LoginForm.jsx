@@ -1,11 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
 import LoginConnector from './LoginConnector';
 
 class LoginForm extends Component {
-    constructor(props) {
+    constructor(props, context) {
         super(props);
 
         this.state = {
@@ -31,19 +32,16 @@ class LoginForm extends Component {
     }
 
     getError(response) {
-        if (response && response.settled) {
-            if (response.fulfilled) {
-                return response.value;
-            } else {
-                return response.reason;
-            }
+        if (response && response.rejected) {
+            return response.reason;
         } else {
             return '';
         }
     }
 
     render() {
-        const errorMessage = this.getError(this.props.loginResponse);
+        const response = this.props.loginResponse;
+        const errorMessage = this.getError(response);
 
         return (
             <div className="login-form">
@@ -63,8 +61,8 @@ class LoginForm extends Component {
                     className="login-button" 
                     label="Login" 
                     disabled = { 
-                        this.loginResponse
-                        && this.loginResponse.isPending 
+                        response &&
+                        response.pending 
                     }
                     secondary={ true }
                     onTouchTap={ this.attemptLogin }

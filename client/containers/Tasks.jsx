@@ -1,15 +1,32 @@
 import React, { Component } from 'react';
+import { connect } from 'react-refetch';
 import Paper from 'material-ui/Paper';
-import LoginBar from '../components/LoginBar.jsx';
-import LoginForm from '../components/LoginForm.jsx';
+import TodoBar from '../components/TodoBar';
+import TaskList from '../components/TaskList';
 
-export default class Tasks extends Component {
+class Tasks extends Component {
     render() {
-        return (
-            <Paper zDepth={ 3 } className="tasks-paper">
-                <h1>Here will be tasks!</h1>
-            </Paper>
-        );
+        let tasks = [];
+
+        this.props.tasksFetch.then(fetchedTasks => {
+            tasks = fetchedTasks;
+        });
+
+        if (this.props.tasksFetch.fulfilled) {
+            return (
+                <Paper zDepth={ 3 } className="tasks-paper">
+                    <TodoBar/>
+                    <TaskList tasks={ tasks } />
+                </Paper>
+            );
+        } else {
+            return <h1>Loading...</h1>
+        }
+
+       
     }
 }
 
+export default connect(props => {
+    return { tasksFetch: '/api/tasks' }
+})(Tasks);

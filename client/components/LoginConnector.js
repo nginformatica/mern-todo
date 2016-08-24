@@ -1,14 +1,13 @@
 import { connect } from 'react-refetch';
+import { browserHistory } from 'react-router';
 
 const LoginConnector = connect.defaults({
     handleResponse: response => {
         const message = response.text();
         if (response.status >= 200 && response.status < 300) {
-            return 'You logged in!';
-        } else if (response.status === 401) {
-            return Promise.reject('Invalid e-mail or password!');
+            browserHistory.push('/tasks');
         } else {
-            throw new Error('Unexpected response: ' + response.status);
+            return Promise.reject('Invalid e-mail or password!');
         }
     }
 });
