@@ -40,7 +40,7 @@ export function save(request, response) {
     task.owner = request.user._id;
     new TaskModel(task).save()
         .then(() => {
-            response.status(200).send();
+            response.status(201).send();
         }, error => {
             response.status(400).send({ message: error.toString() });
         });
