@@ -5,7 +5,7 @@
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./dist/server.js",
-    "build:client": "webpack && cp client/index.html client/styles.css/ dist/public/",
+    "build:client": "webpack && cp client/index.html client/styles.css dist/public/",
     "build:server": "babel ./server -d ./dist",
     "build": "npm run build:server && npm run build:client",
     "production": "node ./dist/server.js",
