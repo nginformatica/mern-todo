@@ -4,7 +4,7 @@
   "description": "Sample To-Do app using the MERN stack.",
   "main": "./src/app.js",
   "scripts": {
-    "start": "babel-node ./server/server.js",
+    "start": "node ./dist/server.js",
     "build:client": "webpack && cp client/index.html client/styles.css/ dist/public/",
     "build:server": "babel ./server -d ./dist",
     "build": "npm run build:server && npm run build:client",
@@ -48,7 +48,7 @@
     "babel-preset-stage-2": "~6.13.0",
     "babel-preset-es2015": "~6.13.2",
     "babel-preset-react": "~6.11.1",
-    "webpack": "~1.13.1",
+    "webpack": "~1.13.2",
     "jsx-loader": "~0.13.2",
     "babel-core": "~6.13.2",
     "babel-loader": "~6.2.5",

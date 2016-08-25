@@ -40,7 +40,7 @@ export function save(request, response) {
     task.owner = request.user._id;
     new TaskModel(task).save()
         .then(() => {
-            response.status(201).send();
+            response.status(201).send(({ message: 'Task saved!' });
         }, error => {
             response.status(400).send({ message: error.toString() });
         });
@@ -53,7 +53,7 @@ export function update(request, response) {
     TaskModel.update({ _id: id, owner: request.user.id }, task)
         .exec()
         .then(() => {
-            response.status(200).send();
+            response.status(200).send({ message: 'Task updated!' });
         }, error => {
             response.status(400).send({ message: error.toString() });
         });
@@ -63,7 +63,7 @@ export function remove(request, response) {
     TaskModel.remove({ _id: request.params.id, owner: request.user.id })
         .exec()
         .then(() => {
-            response.status(200).send();
+            response.status(200).send({ message: 'Task removed!' });
         }, error => {
             response.status(400).send({ message: error.toString() });
         });

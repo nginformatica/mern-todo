@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { List } from 'material-ui/List';
 import { connect, PromiseState } from 'react-refetch';
-import update from 'react-addons-update';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -9,7 +8,7 @@ import dateFormat from 'dateformat';
 import Immutable from 'immutable';
 import Task from './Task';
 
-export default class TaskList extends Component {
+class TaskList extends Component {
     constructor(props) {
         super(props);
 
@@ -34,7 +33,15 @@ export default class TaskList extends Component {
         );
     }
 
-    deleteTask(taskId) {
+    handleToggleDone(response) {
+        if (response.isfulfilled) {
+
+        } else if (res) {
+
+        }
+    }
+
+    handleDeleteTask(taskId) {
         this.setState({ 
             tasks: this.state.tasks.filter(task => {
                 return task._id != taskId;
