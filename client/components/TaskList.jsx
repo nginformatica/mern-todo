@@ -6,6 +6,7 @@ import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
 import dateFormat from 'dateformat';
+import Immutable from 'immutable';
 import Task from './Task';
 
 export default class TaskList extends Component {
@@ -13,35 +14,38 @@ export default class TaskList extends Component {
         super(props);
 
         this.state = {
-            tasks: []
+            tasks: Immutable.List()
         }
     }
 
-    onDelete(deletingTask) {
-        this.setState({ 
-            tasks: this.state.tasks.filter(task => {
-                return task._id != deletingTask._id;
-            }) 
-        })
-    }
+    onDelete(task) {
+
+    }    
 
     onEdit(task) {
         console.log('onEdit: ' + taskId);
     }
 
     onToggleDone(task) {
-        task.isDone = !task.isDone;
-        console.log(task);
-        this.props.updateTask(task)
-            .then(state => {
-                console.log(state);
-            });
+        this.props.updateTask(
+            Immutable.Map(task)
+                .set('isDone', !task.isDone)
+                .toObject()
+        );
+    }
+
+    deleteTask(taskId) {
+        this.setState({ 
+            tasks: this.state.tasks.filter(task => {
+                return task._id != taskId;
+            }) 
+        })
     }
 
     componentWillMount() {
-        this.setState(update(this.state, {
-            tasks: { $push: this.props.tasks }
-        }));
+        this.setState({
+            tasks: this.state.tasks.concat(this.props.tasks)
+        });
     }
 
     render() {
@@ -56,11 +60,12 @@ export default class TaskList extends Component {
 
 
         let tasks = [];
-        this.state.tasks.map(task => {
+        this.state.tasks.map((task, iterator) => {
+            console.log(task);
             const dueDate = Date.parse(task.due);
             tasks.push(
                 <Task
-                    key={ task._id }
+                    key={ iterator }
                     summary={ task.summary }
                     description={ task.description }
                     isDone={ task.isDone }
