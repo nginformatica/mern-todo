@@ -1,6 +1,15 @@
 ## To-Do Node.js application
 This is a simple example of a Node.js application using the MERN stack (like MEAN, but using React instead).
 
+### Installing
+Clone this repository first, then run:
+```bash
+npm install
+npm run build
+npm run start
+```
+Now it should be listening in http://localhost:8000 by default.
+
 **Why a To-Do application?**
 Because it needs to be small and yet show some nice perspective of what MERN stack is about.
 

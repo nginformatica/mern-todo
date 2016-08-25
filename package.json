@@ -5,7 +5,9 @@
   "main": "./src/app.js",
   "scripts": {
     "start": "babel-node ./server/server.js",
-    "build": "babel ./server -d ./dist",
+    "build:client": "webpack && cp client/index.html client/styles.css/ dist/public/",
+    "build:server": "babel ./server -d ./dist",
+    "build": "npm run build:server && npm run build:client",
     "production": "node ./dist/server.js",
     "test": "xo",
     "clean": "rm -rf node_modules"
