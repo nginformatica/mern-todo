@@ -13,12 +13,12 @@ export function findAll(request, response) {
 }
 
 export function findById(request, response) {
-    TaskModel.find({ _id: request.params.id, owner: request.user.id })
+    TaskModel.findOne({ _id: request.params.id, owner: request.user.id })
         .select('summary description isDone due').exec()
         .then(task => {
             response.status(200).send(task);
         }, () => {
-            response.status(200).send([]);
+            response.status(200).send();
         });
 }
 
@@ -48,7 +48,9 @@ export function save(request, response) {
 
 export function update(request, response) {
     const task = request.body;
-    TaskModel.update({ _id: task._id, owner: request.user.id }, task)
+    const id = task._id
+    delete task._id;
+    TaskModel.update({ _id: id, owner: request.user.id }, task)
         .exec()
         .then(() => {
             response.status(200).send();

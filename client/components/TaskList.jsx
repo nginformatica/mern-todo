@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { List } from 'material-ui/List';
+import { connect, PromiseState } from 'react-refetch';
 import update from 'react-addons-update';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
@@ -16,16 +17,25 @@ export default class TaskList extends Component {
         }
     }
 
-    onDelete(taskId) {
-        console.log('onDelete: ' + taskId);
+    onDelete(deletingTask) {
+        this.setState({ 
+            tasks: this.state.tasks.filter(task => {
+                return task._id != deletingTask._id;
+            }) 
+        })
     }
 
-    onEdit(taskId) {
+    onEdit(task) {
         console.log('onEdit: ' + taskId);
     }
 
-    onDone(taskId) {
-        console.log('onDone: ' + taskId);
+    onToggleDone(task) {
+        task.isDone = !task.isDone;
+        console.log(task);
+        this.props.updateTask(task)
+            .then(state => {
+                console.log(state);
+            });
     }
 
     componentWillMount() {
@@ -35,6 +45,16 @@ export default class TaskList extends Component {
     }
 
     render() {
+        const response = this.props.updateTaskResponse;
+        if (response) {
+            if (response.rejected) {
+                console.log(response.reason);
+            } else if (response.fulfilled) {
+                console.log('It works!');
+            }
+        }
+
+
         let tasks = [];
         this.state.tasks.map(task => {
             const dueDate = Date.parse(task.due);
@@ -45,9 +65,9 @@ export default class TaskList extends Component {
                     description={ task.description }
                     isDone={ task.isDone }
                     isLate={ dueDate < Date.now() }
-                    onDelete={ this.onDelete.bind(this, task._id) }
-                    onEdit={ this.onEdit.bind(this, task._id) }
-                    onDone={ this.onDone.bind(this, task._id) }
+                    onDelete={ this.onDelete.bind(this, task) }
+                    onEdit={ this.onEdit.bind(this, task) }
+                    onToggleDone={ this.onToggleDone.bind(this, task) }
                     due={ dateFormat(dueDate, 'dddd, dd/mm/yy HH:MM') }
                 />
             );
@@ -66,3 +86,21 @@ export default class TaskList extends Component {
         );
     }
 }
+
+export default connect(props => {
+    return {
+        deleteTask: taskId => ({
+            deleteTaskResponse: {
+                url: 'api/tasks/'.concat(taskId),
+                method: 'DELETE',
+            }
+        }),
+        updateTask: task => ({
+            updateTaskResponse: {
+                url: 'api/tasks',
+                method: 'PUT',
+                body: JSON.stringify(task)
+            }
+        })
+    }
+})(TaskList);

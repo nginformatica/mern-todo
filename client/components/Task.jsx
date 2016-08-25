@@ -15,7 +15,8 @@ export default class Task extends Component {
         return {
             onDelete: this.props.onDelete,
             onEdit: this.props.onEdit,
-            onDone: this.props.onDone
+            onToggleDone: this.props.onToggleDone,
+            isDone: this.props.isDone
         };
     }
 

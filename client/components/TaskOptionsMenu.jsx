@@ -23,7 +23,11 @@ export default class TaskOptionsMenu extends Component {
             <IconMenu iconButtonElement={iconButtonElement}>
                 <MenuItem onTouchTap={ this.props.onEdit }>Edit</MenuItem>
                 <MenuItem onTouchTap={ this.props.onDelete }>Delete</MenuItem>
-                <MenuItem onTouchTap={ this.props.onDone }>Done</MenuItem>
+                <MenuItem onTouchTap={ this.props.onToggleDone }>{
+                    this.props.isDone 
+                    ? 'Undone'
+                    : 'Done'
+                }</MenuItem>
             </IconMenu>
         );
     }
