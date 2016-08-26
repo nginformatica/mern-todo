@@ -5,7 +5,7 @@ import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
 import dateFormat from 'dateformat';
-import Immutable from 'immutable';
+import { Map } from 'immutable';
 import Task from './Task';
 
 class TaskList extends Component {
@@ -13,7 +13,7 @@ class TaskList extends Component {
         super(props);
 
         this.state = {
-            tasks: Immutable.List()
+            tasks: Map()
         }
     }
 
@@ -25,61 +25,53 @@ class TaskList extends Component {
         console.log('onEdit: ' + taskId);
     }
 
-    onToggleDone(task) {
-        this.props.updateTask(
-            Immutable.Map(task)
-                .set('isDone', !task.isDone)
-                .toObject()
-        );
+    onToggleDone(task, key) {
+        const updatedTask = Map(task).set('isDone', !task.isDone).toObject();
+        this.setState({ awaitingResponse: { updatedTask, key } });
+        this.props.updateTask(updatedTask);
     }
 
     handleToggleDone(response) {
-        if (response.isfulfilled) {
-
-        } else if (res) {
+        console.log(response);
+        if (response.fulfilled) {
+            this.setState({
+                tasks: this.state.tasks.set(
+                    this.state.awaitingResponse.key,
+                    this.state.awaitingResponse.updatedTask
+                )
+            });
+        } else if (response.rejected) {
 
         }
     }
 
     handleDeleteTask(taskId) {
         this.setState({ 
-            tasks: this.state.tasks.filter(task => {
-                return task._id != taskId;
-            }) 
+            tasks: this.state.tasks.filterNot(task => task._id === taskId)
         })
     }
 
     componentWillMount() {
-        this.setState({
-            tasks: this.state.tasks.concat(this.props.tasks)
+        this.setState({ 
+            tasks: this.state.tasks.concat(
+                this.props.tasks.map((task, key) => [key, task])
+            )
         });
     }
 
     render() {
-        const response = this.props.updateTaskResponse;
-        if (response) {
-            if (response.rejected) {
-                console.log(response.reason);
-            } else if (response.fulfilled) {
-                console.log('It works!');
-            }
-        }
-
-
-        let tasks = [];
-        this.state.tasks.map((task, iterator) => {
-            console.log(task);
+        const tasks = this.state.tasks.map((task, key) => {
             const dueDate = Date.parse(task.due);
-            tasks.push(
+            return (
                 <Task
-                    key={ iterator }
+                    key={ key }
                     summary={ task.summary }
                     description={ task.description }
                     isDone={ task.isDone }
                     isLate={ dueDate < Date.now() }
                     onDelete={ this.onDelete.bind(this, task) }
                     onEdit={ this.onEdit.bind(this, task) }
-                    onToggleDone={ this.onToggleDone.bind(this, task) }
+                    onToggleDone={ this.onToggleDone.bind(this, task, key) }
                     due={ dateFormat(dueDate, 'dddd, dd/mm/yy HH:MM') }
                 />
             );
@@ -99,7 +91,18 @@ class TaskList extends Component {
     }
 }
 
-export default connect(props => {
+const TaskConnector = connect.defaults({
+    handleResponse: response => {
+        const message = response.text();
+        if (response.status >= 200 && response.status < 300) {
+            return '';
+        } else {
+            return Promise.reject('Invalid request!');
+        }
+    }
+});
+
+export default TaskConnector(props => {
     return {
         deleteTask: taskId => ({
             deleteTaskResponse: {
@@ -113,6 +116,6 @@ export default connect(props => {
                 method: 'PUT',
                 body: JSON.stringify(task)
             }
-        })
-    }
+        }
+)    }
 })(TaskList);

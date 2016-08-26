@@ -83,4 +83,4 @@ export default LoginConnector(props => {
             }
         })
     }
-})(LoginForm)
+})(LoginForm);
