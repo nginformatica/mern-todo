@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: './client/index.jsx',
+    entry: ['babel-polyfill', 'whatwg-fetch', './client/index.jsx'],
     output: {
         path: path.join(__dirname, 'dist/public'),
         filename: 'index.js'
