@@ -10,4 +10,3 @@ export function getRoutes() {
 
     return router;
 }
-

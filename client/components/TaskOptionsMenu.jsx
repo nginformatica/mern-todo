@@ -14,8 +14,7 @@ export default class TaskOptionsMenu extends Component {
             <IconButton
                 touch={ true }
                 tooltip="Options"
-                tooltipPosition="bottom-left"
-            >
+                tooltipPosition="bottom-left">
                 <MoreVertIcon/>
             </IconButton>
         );
@@ -24,7 +23,7 @@ export default class TaskOptionsMenu extends Component {
                 <MenuItem onTouchTap={ this.props.onEdit }>Edit</MenuItem>
                 <MenuItem onTouchTap={ this.props.onDelete }>Delete</MenuItem>
                 <MenuItem onTouchTap={ this.props.onToggleDone }>{
-                    this.props.isDone 
+                    this.props.isDone
                     ? 'Undone'
                     : 'Done'
                 }</MenuItem>

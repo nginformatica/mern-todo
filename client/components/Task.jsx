@@ -19,7 +19,7 @@ class Task extends Component {
             onDelete: this.props.onDelete,
             onEdit: this.props.onEdit,
             onToggleDone: this.onToggleDone.bind(this),
-            isDone: this.props.isDone
+            isDone: this.state.task.get('isDone')
         };
     }
 

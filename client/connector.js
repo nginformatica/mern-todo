@@ -1,4 +1,4 @@
-import { connector } from 'react-refetch';
+import { connect } from 'react-refetch';
 
 const Connector = connect.defaults({
     handleResponse: response => {
