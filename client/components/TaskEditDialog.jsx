@@ -15,7 +15,8 @@ export default class TaskEditDialog extends Component {
     }
 
     render() {
-        const options = this.state.task ? { 
+        const task = this.state.task;
+        const options = task ? { 
                 buttonLabel: 'Edit',
                 dialogTitle: 'Edit Task' 
             } : { 
@@ -46,11 +47,12 @@ export default class TaskEditDialog extends Component {
                 title={ options.dialogTitle }
                 modal={ true }
                 onRequestClose={ this.props.onCloseDialog }
-                autoScrollBodyContent={true}>
+                autoScrollBodyContent={ true }>
                 <TextField
                     floatingLabelText="Summary"
                     onChange={ this.onMailChange }
                     fullWidth={ true }
+                    defaultValue={ task ? task.summary : '' }
                 />
                 <TextField
                     floatingLabelText="Description"
@@ -58,11 +60,13 @@ export default class TaskEditDialog extends Component {
                     rowsMax={ 4 }
                     onChange={ this.onPasswordChange }
                     fullWidth={ true }
+                    defaultValue={ task ? task.description : '' }
+
                 />
                 <DatePicker
                     floatingLabelText={ 'Due date' }
                     mode={ 'landscape' }
-                    shouldDisableDate={ 
+                    shouldDisableDate={
                         date => new Date().setHours(0,0,0,0) > date
                     }
                     formatDate={
@@ -72,11 +76,13 @@ export default class TaskEditDialog extends Component {
                             year: 'numeric'
                         }).format
                     }
+                    defaultDate={ task ? new Date(task.due) : new Date() }
                 />
                 <TimePicker
                     mode={ 'landscape' }
                     floatingLabelText={ 'Due hour' }
                     format={ '24hr' }
+                    defaultTime={ task ? new Date(task.due) : new Date() }
                 />
             </Dialog>
         );

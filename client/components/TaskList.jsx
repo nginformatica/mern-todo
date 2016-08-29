@@ -41,7 +41,9 @@ class TaskList extends Component {
     }
 
     afterCreateTask(task) {
-        console.log(task)
+        if (task) {
+            // TODO
+        }
         this.setState({ creatingTask: false });
     }
 

@@ -7,17 +7,21 @@ import IconButton from 'material-ui/IconButton';
 import Check from 'material-ui/svg-icons/action/check-circle';
 import { Map } from 'immutable';
 import TaskOptionsMenu from './TaskOptionsMenu';
+import TaskEditDialog from './TaskEditDialog';
 import Connector from '../connector';
 
 class Task extends Component {
     constructor(props) {
         super(props);
+
+        this.editTask = this.editTask.bind(this);
+        this.afterEditTask = this.afterEditTask.bind(this);
     }
 
     getOptions() {
         return {
             onDelete: this.props.onDelete,
-            onEdit: this.props.onEdit,
+            onEdit: this.editTask,
             onToggleDone: this.onToggleDone.bind(this),
             isDone: this.state.task.get('isDone')
         };
@@ -30,11 +34,18 @@ class Task extends Component {
         this.setState({ updatedTask });
     }
 
+    editTask() {
+        this.setState({ editingTask: true });
+    }
+
+    afterEditTask() {
+        this.setState({ editingTask: false });
+    }
 
     handleTaskUpdate(response) {
         if (response && this.state.updatedTask) {
             if (response.fulfilled) {
-                this.setState({ 
+                this.setState({
                     task: this.state.updatedTask,
                     updatedTask: null
                 });
@@ -45,7 +56,10 @@ class Task extends Component {
     }
 
     componentWillMount() {
-        this.setState({ task: Map(this.props.task) });
+        this.setState({
+            task: Map(this.props.task),
+            editingTask: false
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -86,15 +100,21 @@ class Task extends Component {
             : (<Check color={ grey400 }/>);
 
         return (
-            <ListItem
-                leftIcon={ taskIcon }
-                primaryText={ this.props.task.summary }
-                secondaryText={ secondaryText }
-                secondaryTextLines={ 2 }
-                rightIconButton={ 
-                    (new TaskOptionsMenu(this.getOptions())).render()
-                }
-            />
+            <div>
+                <TaskEditDialog
+                    open={ this.state.editingTask }
+                    task={ this.state.task.toObject() }
+                    onCloseDialog={ this.afterEditTask }/>
+                <ListItem
+                    leftIcon={ taskIcon }
+                    primaryText={ this.props.task.summary }
+                    secondaryText={ secondaryText }
+                    secondaryTextLines={ 2 }
+                    rightIconButton={ 
+                        (new TaskOptionsMenu(this.getOptions())).render()
+                    }
+                />
+            </div>
         );
     }
 }
