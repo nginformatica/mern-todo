@@ -6,6 +6,7 @@ import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Map } from 'immutable';
 import Task from './Task';
+import TaskEditDialog from './TaskEditDialog';
 import Connector from '../connector';
 
 class TaskList extends Component {
@@ -13,8 +14,12 @@ class TaskList extends Component {
         super(props);
 
         this.state = {
-            tasks: Map()
+            tasks: Map(),
+            creatingTask: false
         }
+
+        this.createTask = this.createTask.bind(this);
+        this.afterCreateTask = this.afterCreateTask.bind(this);
     }
 
     onDelete(task) {
@@ -29,6 +34,15 @@ class TaskList extends Component {
         this.setState({ 
             tasks: this.state.tasks.filterNot(task => task._id === taskId)
         })
+    }
+
+    createTask() {
+        this.setState({ creatingTask: true });
+    }
+
+    afterCreateTask(task) {
+        console.log(task)
+        this.setState({ creatingTask: false });
     }
 
     componentWillMount() {
@@ -52,12 +66,17 @@ class TaskList extends Component {
 
         return (
             <List className="login-form">
+                <TaskEditDialog 
+                    open={ this.state.creatingTask }
+                    onCloseDialog={ this.afterCreateTask }
+                />
                 <Subheader>Tasks</Subheader>
                 { tasks }
                 <RaisedButton 
                     className="login-button"
                     label="New task"
                     secondary={ true }
+                    onTouchTap={ this.createTask }
                 />
             </List>
         );
