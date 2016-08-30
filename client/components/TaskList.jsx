@@ -61,14 +61,18 @@ class TaskList extends Component {
     handleCreationResponse() {
         const response = this.props.createTaskResponse;
         if (response && response.settled && this.state.toCreate) {
-            const createdTask = this.state.toCreate;
-            createdTask._id = JSON.parse(response.value);
-            this.setState({
-                tasks: this.state.tasks.concat(
-                    [[createdTask._id, createdTask]]
-                ),
-                toCreate: null
-            });
+            if (response.fulfilled) {
+                const createdTask = this.state.toCreate;
+                createdTask._id = JSON.parse(response.value).id;
+                this.setState({
+                    tasks: this.state.tasks.concat(
+                        [[createdTask._id, createdTask]]
+                    ),
+                    toCreate: null
+                });
+            } else {
+                // TODO show a error message
+            }
         }
     }
 
