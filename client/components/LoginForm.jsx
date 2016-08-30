@@ -1,42 +1,41 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Divider from 'material-ui/Divider';
-import LoginConnector from './LoginConnector';
+import loginConnector from './LoginConnector';
 
 class LoginForm extends Component {
-    constructor(props, context) {
+
+    constructor(props) {
         super(props);
 
-        this.state = {
-            email: '',
-            password: ''
-        }
-
-        this.onMailChange = this.onMailChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.attemptLogin = this.attemptLogin.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleLoginAttempt = this.handleLoginAttempt.bind(this);
     }
 
-    onMailChange(event) {
+    handleEmailChange(event) {
         this.setState({ email: event.target.value });
-    }    
+    }
 
-    onPasswordChange(event) {
+    handlePasswordChange(event) {
         this.setState({ password: event.target.value });
     }
 
-    attemptLogin() {
+    handleLoginAttempt() {
         this.props.login(this.state);
     }
 
     getError(response) {
-        if (response && response.rejected) {
-            return response.reason;
-        } else {
-            return '';
-        }
+        return response && response.rejected
+            ? response.reason
+            : '';
+    }
+
+    componentWillMount() {
+        this.setState({
+            email: '',
+            password: ''
+        });
     }
 
     render() {
@@ -47,32 +46,37 @@ class LoginForm extends Component {
             <div className="login-form">
                 <TextField
                     floatingLabelText="E-mail"
-                    onChange={ this.onMailChange }
+                    onChange={ this.handleEmailChange }
                     fullWidth={ true }
                 />
                 <TextField
                     floatingLabelText="Password"
                     type="password"
-                    onChange={ this.onPasswordChange }
+                    onChange={ this.handlePasswordChange }
                     fullWidth={ true }
                 />
                 <span>{ errorMessage }</span>
-                <RaisedButton 
-                    className="login-button" 
-                    label="Login" 
-                    disabled = { 
-                        response &&
-                        response.pending 
+                <RaisedButton
+                    className="login-button"
+                    label="Login"
+                    disabled={
+                        response
+                        && response.pending
                     }
                     secondary={ true }
-                    onTouchTap={ this.attemptLogin }
+                    onTouchTap={ this.handleLoginAttempt }
                 />
             </div>
         );
     }
 }
 
-export default LoginConnector(props => {
+LoginForm.propTypes = {
+    login: React.PropTypes.func.isRequired,
+    loginResponse: React.PropTypes.object
+};
+
+export default loginConnector(() => {
     return {
         login: userLogin => ({
             loginResponse: {
@@ -82,5 +86,5 @@ export default LoginConnector(props => {
                 force: true
             }
         })
-    }
+    };
 })(LoginForm);

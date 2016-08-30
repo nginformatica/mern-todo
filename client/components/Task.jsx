@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
-import { connect } from 'react-refetch';
 import { ListItem } from 'material-ui/List';
 import dateFormat from 'dateformat';
 import { green500, grey400 } from 'material-ui/styles/colors';
-import IconButton from 'material-ui/IconButton';
 import Check from 'material-ui/svg-icons/action/check-circle';
 import { Map } from 'immutable';
+import connector from '../connector';
+import * as propTypes from '../prop-types';
 import TaskOptionsMenu from './TaskOptionsMenu';
 import TaskEditDialog from './TaskEditDialog';
-import Connector from '../connector';
 
 class Task extends Component {
     constructor(props) {
         super(props);
 
-        this.editTask = this.editTask.bind(this);
-        this.afterEditTask = this.afterEditTask.bind(this);
+        this.handleTaskEdition = this.handleTaskEdition.bind(this);
+        this.handleAfterTaskEdition = this.handleAfterTaskEdition.bind(this);
     }
 
     getOptions() {
         return {
             onDelete: this.props.onDelete,
-            onEdit: this.editTask,
+            onEdit: this.handleTaskEdition,
             onToggleDone: this.onToggleDone.bind(this),
             isDone: this.state.task.get('isDone')
         };
@@ -34,11 +33,11 @@ class Task extends Component {
         this.setState({ updatedTask });
     }
 
-    editTask() {
+    handleTaskEdition() {
         this.setState({ editingTask: true });
     }
 
-    afterEditTask() {
+    handleAfterTaskEdition() {
         this.setState({ editingTask: false });
     }
 
@@ -57,7 +56,7 @@ class Task extends Component {
 
     componentWillMount() {
         this.setState({
-            task: Map(this.props.task),
+            task: new Map(this.props.task),
             editingTask: false
         });
     }
@@ -69,20 +68,19 @@ class Task extends Component {
     renderDescription() {
         if (this.props.task.description) {
             return (
-                <span className='description'>
+                <span className="description">
                     { ' • ' }
                     { this.props.task.description }
                 </span>
             );
-        } else {
-            return '';
-        };
+        }
+        return '';
     }
 
     render() {
         const dueDate = Date.parse(this.props.task.due);
         const prettyDate = dateFormat(dueDate, 'dddd, dd/mm/yy HH:MM');
-        const dateClass = dueDate < Date.now() ? 'date-late': 'date-default';
+        const dateClass = dueDate < Date.now() ? 'date-late' : 'date-default';
         const description = this.renderDescription();
 
         const secondaryText = (
@@ -93,7 +91,7 @@ class Task extends Component {
                 </span>
                 { description }
             </span>
-        )
+        );
 
         const taskIcon = this.state.task.get('isDone')
             ? (<Check color={ green500 }/>)
@@ -104,13 +102,14 @@ class Task extends Component {
                 <TaskEditDialog
                     open={ this.state.editingTask }
                     task={ this.state.task.toObject() }
-                    onCloseDialog={ this.afterEditTask }/>
+                    onCloseDialog={ this.handleAfterTaskEdition }
+                />
                 <ListItem
                     leftIcon={ taskIcon }
                     primaryText={ this.props.task.summary }
                     secondaryText={ secondaryText }
                     secondaryTextLines={ 2 }
-                    rightIconButton={ 
+                    rightIconButton={
                         (new TaskOptionsMenu(this.getOptions())).render()
                     }
                 />
@@ -119,7 +118,13 @@ class Task extends Component {
     }
 }
 
-export default Connector(props => {
+Task.propTypes = {
+    onDelete: React.PropTypes.func.isRequired,
+    updateTask: React.PropTypes.func.isRequired,
+    task: propTypes.task.isRequired
+};
+
+export default connector(() => {
     return {
         updateTask: task => ({
             updateTaskResponse: {
@@ -127,6 +132,6 @@ export default Connector(props => {
                 method: 'PUT',
                 body: JSON.stringify(task.toObject())
             }
-        })    
-    }
+        })
+    };
 })(Task);

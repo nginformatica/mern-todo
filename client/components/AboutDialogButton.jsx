@@ -12,15 +12,15 @@ export default class AboutDialogButton extends Component {
             dialogOpen: false
         };
 
-        this.openDialog = this.openDialog.bind(this);
-        this.closeDialog = this.closeDialog.bind(this);
+        this.handleDialogOpen = this.handleDialogOpen.bind(this);
+        this.handleDialogClose = this.handleDialogClose.bind(this);
     }
-    
-    openDialog() {
+
+    handleDialogOpen() {
         this.setState({ dialogOpen: true });
     }
 
-    closeDialog() {
+    handleDialogClose() {
         this.setState({ dialogOpen: false });
     }
 
@@ -29,24 +29,24 @@ export default class AboutDialogButton extends Component {
             <FlatButton
                 label="Okay!"
                 primary={ true }
-                onTouchTap={ this.closeDialog }
+                onTouchTap={ this.handleDialogClose }
             />
         );
 
         return (
             <div>
                 <IconButton
-                    onTouchTap={ this.openDialog }
+                    onTouchTap={ this.handleDialogOpen }
                     tooltip="About"
                 >
-                    <InfoIcon color={ white } />
+                    <InfoIcon color={ white }/>
                 </IconButton>
                 <Dialog
                     title="About"
                     actions={ okayButton }
                     modal={ false }
                     open={ this.state.dialogOpen }
-                    onRequestClose={ this.closeDialog }
+                    onRequestClose={ this.handleDialogClose }
                 >
                     Hello!
                 </Dialog>

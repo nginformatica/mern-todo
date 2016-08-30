@@ -5,10 +5,10 @@ import AboutDialogButton from './AboutDialogButton';
 export default class TodoBar extends Component {
     render() {
         return (
-            <AppBar 
+            <AppBar
                 title="To-Do Application"
-                iconElementRight={ <AboutDialogButton /> }
-                iconElementLeft={ <div></div> }
+                iconElementRight={ <AboutDialogButton/> }
+                iconElementLeft={ <div/> }
             />
         );
     }

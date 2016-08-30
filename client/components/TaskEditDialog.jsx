@@ -4,31 +4,31 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
+import * as propTypes from '../prop-types';
 
-export default class TaskEditDialog extends Component {
-    constructor(props) {
-        super(props);
-    }
-
+class TaskEditDialog extends Component {
     componentWillMount() {
         this.setState({ task: this.props.task });
     }
 
+    handleDialogClose() {
+        this.props.onCloseDialog('test');
+    }
+
     render() {
         const task = this.state.task;
-        const options = task ? { 
-                buttonLabel: 'Edit',
-                dialogTitle: 'Edit Task' 
-            } : { 
-                buttonLabel: 'Create',
-                dialogTitle: 'New Task'
-            };
-        
+        const options = task ? {
+            buttonLabel: 'Edit',
+            dialogTitle: 'Edit Task'
+        } : {
+            buttonLabel: 'Create',
+            dialogTitle: 'New Task'
+        };
         const confirm = (
             <FlatButton
                 label={ options.buttonLabel }
                 primary={ true }
-                onTouchTap={ () => this.props.onCloseDialog('test') }
+                onTouchTap={ this.handleDialogClose }
             />
         );
 
@@ -42,15 +42,15 @@ export default class TaskEditDialog extends Component {
 
         return (
             <Dialog
-                actions={ [ cancel, confirm ] }
+                actions={ [cancel, confirm] }
                 open={ this.props.open }
                 title={ options.dialogTitle }
                 modal={ true }
                 onRequestClose={ this.props.onCloseDialog }
-                autoScrollBodyContent={ true }>
+                autoScrollBodyContent={ true }
+            >
                 <TextField
                     floatingLabelText="Summary"
-                    onChange={ this.onMailChange }
                     fullWidth={ true }
                     defaultValue={ task ? task.summary : '' }
                 />
@@ -58,7 +58,6 @@ export default class TaskEditDialog extends Component {
                     floatingLabelText="Description"
                     multiLine={ true }
                     rowsMax={ 4 }
-                    onChange={ this.onPasswordChange }
                     fullWidth={ true }
                     defaultValue={ task ? task.description : '' }
 
@@ -67,7 +66,7 @@ export default class TaskEditDialog extends Component {
                     floatingLabelText={ 'Due date' }
                     mode={ 'landscape' }
                     shouldDisableDate={
-                        date => new Date().setHours(0,0,0,0) > date
+                        date => new Date().setHours(0, 0, 0, 0) > date
                     }
                     formatDate={
                         new Intl.DateTimeFormat('en-US', {
@@ -88,3 +87,11 @@ export default class TaskEditDialog extends Component {
         );
     }
 }
+
+TaskEditDialog.propTypes = {
+    task: propTypes.task.isRequired,
+    onCloseDialog: React.PropTypes.func.isRequired,
+    open: React.PropTypes.bool.isRequired
+};
+
+export default TaskEditDialog;

@@ -48,7 +48,7 @@ export function save(request, response) {
 
 export function update(request, response) {
     const task = request.body;
-    const id = task._id
+    const id = task._id;
     delete task._id;
     TaskModel.update({ _id: id, owner: request.user.id }, task)
         .exec()

@@ -12,7 +12,7 @@ export function initialize() {
             .then(user => {
                 return done(null, user);
             }, () => {
-                return done({ 
+                return done({
                     message: 'Invalid email or password!'
                 });
             });

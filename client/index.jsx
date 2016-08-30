@@ -13,9 +13,9 @@ class Hello extends React.Component {
 
 const routes = (
     <Route component={ App }>
-        <Route path='/' component={ Hello } />
-        <Route path='/login' component={ Login } />
-        <Route path='/tasks' component={ Tasks } /> 
+        <Route path="/" component={ Hello }/>
+        <Route path="/login" component={ Login }/>
+        <Route path="/tasks" component={ Tasks }/>
     </Route>
 );
 

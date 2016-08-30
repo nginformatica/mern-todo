@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-refetch';
+import { connect, PromiseState } from 'react-refetch';
 import Paper from 'material-ui/Paper';
 import { List } from 'immutable';
 import TodoBar from '../components/TodoBar';
@@ -9,24 +9,25 @@ class Tasks extends Component {
     render() {
         let tasks;
         this.props.tasksFetch.then(fetchedTasks => {
-            tasks = List(fetchedTasks);
+            tasks = new List(fetchedTasks);
         });
 
         if (this.props.tasksFetch.fulfilled) {
             return (
                 <Paper zDepth={ 3 } className="tasks-paper">
                     <TodoBar/>
-                    <TaskList tasks={ tasks } />
+                    <TaskList tasks={ tasks }/>
                 </Paper>
             );
-        } else {
-            return <h1>Loading...</h1>
         }
-
-       
+        return <h1>Loading...</h1>;
     }
 }
 
-export default connect(props => {
-    return { tasksFetch: '/api/tasks' }
+Tasks.propTypes = {
+    tasksFetch: React.PropTypes.instanceOf(PromiseState).isRequired
+};
+
+export default connect(() => {
+    return { tasksFetch: '/api/tasks' };
 })(Tasks);

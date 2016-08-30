@@ -7,10 +7,9 @@ export default class Login extends Component {
     render() {
         return (
             <Paper zDepth={ 3 } className="login-paper">
-                <LoginBar />
-                <LoginForm />
+                <LoginBar/>
+                <LoginForm/>
             </Paper>
         );
     }
 }
-

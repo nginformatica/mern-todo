@@ -5,10 +5,10 @@ import AboutDialogButton from './AboutDialogButton';
 export default class LoginBar extends Component {
     render() {
         return (
-            <AppBar 
+            <AppBar
                 title="Login"
-                iconElementRight={ <AboutDialogButton /> }
-                iconElementLeft={ <div></div> }
+                iconElementRight={ <AboutDialogButton/> }
+                iconElementLeft={ <div/> }
             />
         );
     }

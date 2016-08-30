@@ -56,18 +56,50 @@
     "babel-loader": "~6.2.5",
     "react-hot-loader": "~1.3.0",
     "webpack-dev-server": "~1.14.1",
-    "babel-polyfill": "~6.13.0"
+    "babel-polyfill": "~6.13.0",
+    "eslint-config-xo": "~0.15.4",
+    "eslint-plugin-react": "~6.2.0",
+    "eslint": "~3.4.0",
+    "eslint-config-xo-react": "~0.9.0"
   },
   "xo": {
+    "extends": "xo-react",
     "esnext": true,
     "space": 4,
+    "globals": [
+      "document"
+    ],
     "rules": {
+      "react/require-optimization": [
+        "off"
+      ],
+      "react/jsx-boolean-value": [
+        "off"
+      ],
       "xo/no-process-exit": [
+        "off"
+      ],
+      "react/jsx-closing-bracket-location": [
+        "error",
+        "line-aligned"
+      ],
+      "react/jsx-curly-spacing": [
+        "error",
+        "always"
+      ],
+      "operator-linebreak": [
+        "error",
+        "before"
+      ],
+      "react/jsx-no-bind": [
         "off"
       ],
       "babel/object-curly-spacing": [
         "error",
         "always"
+      ],
+      "xo/filename-case": [
+        "off"
       ]
     }
   },

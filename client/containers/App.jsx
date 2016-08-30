@@ -5,7 +5,7 @@ import AppTheme from '../materialTheme';
 
 injectTapEventPlugin();
 
-export default class App extends Component {
+class App extends Component {
     render() {
         return (
             <MuiThemeProvider muiTheme={ AppTheme }>
@@ -14,3 +14,9 @@ export default class App extends Component {
         );
     }
 }
+
+App.propTypes = {
+    children: React.PropTypes.node.isRequired
+};
+
+export default App;

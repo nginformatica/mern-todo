@@ -1,5 +1,4 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
     entry: ['babel-polyfill', 'whatwg-fetch', './client/index.jsx'],
@@ -9,10 +8,10 @@ module.exports = {
     },
     module: {
         loaders: [
-            { 
+            {
                 test: /\.jsx?$/,
                 loader: 'babel',
-                exclude: /node_modules/,
+                exclude: /node_modules/
             }
         ]
     },

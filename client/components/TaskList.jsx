@@ -1,54 +1,50 @@
 import React, { Component } from 'react';
 import { List } from 'material-ui/List';
-import { connect, PromiseState } from 'react-refetch';
-import Divider from 'material-ui/Divider';
+import { PromiseState } from 'react-refetch';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Map } from 'immutable';
+import connector from '../connector';
+import * as propTypes from '../prop-types';
 import Task from './Task';
 import TaskEditDialog from './TaskEditDialog';
-import Connector from '../connector';
 
 class TaskList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            tasks: Map(),
+            tasks: new Map(),
             creatingTask: false
-        }
+        };
 
-        this.createTask = this.createTask.bind(this);
-        this.afterCreateTask = this.afterCreateTask.bind(this);
+        this.handleTaskCreation = this.handleTaskCreation.bind(this);
+        this.handleAfterTaskCreation = this.handleAfterTaskCreation.bind(this);
     }
 
-    onDelete(task) {
-
-    }    
-
-    onEdit(task) {
-        console.log('onEdit: ' + taskId);
+    handleTaskRemoval(task) {
+        this.setState({
+            tasks: this.state.tasks.filterNot(currentTask => {
+                return currentTask._id === task._id;
+            }),
+            toRemove: task
+        });
     }
 
-    handleDeleteTask(taskId) {
-        this.setState({ 
-            tasks: this.state.tasks.filterNot(task => task._id === taskId)
-        })
-    }
-
-    createTask() {
+    handleTaskCreation() {
         this.setState({ creatingTask: true });
     }
 
-    afterCreateTask(task) {
+    handleAfterTaskCreation(task) {
         if (task) {
-            // TODO
+            // TODO implement
+            console.log(task);
         }
         this.setState({ creatingTask: false });
     }
 
     componentWillMount() {
-        this.setState({ 
+        this.setState({
             tasks: this.state.tasks.concat(
                 this.props.tasks.map((task, key) => [key, task])
             )
@@ -61,37 +57,43 @@ class TaskList extends Component {
                 <Task
                     task={ task }
                     key={ key }
-                    onDelete={ this.onDelete.bind(this, task) }
+                    onDelete={ this.handleTaskRemoval.bind(this, task) }
                 />
             );
         });
 
         return (
             <List className="login-form">
-                <TaskEditDialog 
+                <TaskEditDialog
                     open={ this.state.creatingTask }
-                    onCloseDialog={ this.afterCreateTask }
+                    onCloseDialog={ this.handleAfterTaskCreation }
                 />
                 <Subheader>Tasks</Subheader>
                 { tasks }
-                <RaisedButton 
+                <RaisedButton
                     className="login-button"
                     label="New task"
                     secondary={ true }
-                    onTouchTap={ this.createTask }
+                    onTouchTap={ this.handleTaskCreation }
                 />
             </List>
         );
     }
 }
 
-export default Connector(props => {
+TaskList.propTypes = {
+    tasks: React.PropTypes.arrayOf(propTypes.task),
+    removeTask: React.PropTypes.func.isRequired,
+    removeTaskResponse: React.PropTypes.instanceOf(PromiseState)
+};
+
+export default connector(() => {
     return {
-        deleteTask: taskId => ({
-            deleteTaskResponse: {
+        removeTask: taskId => ({
+            removeTaskResponse: {
                 url: 'api/tasks/'.concat(taskId),
-                method: 'DELETE',
+                method: 'DELETE'
             }
-        }) 
-    }
+        })
+    };
 })(TaskList);
