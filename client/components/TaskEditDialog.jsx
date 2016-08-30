@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Map } from 'immutable';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
@@ -7,16 +8,78 @@ import TimePicker from 'material-ui/TimePicker';
 import * as propTypes from '../prop-types';
 
 class TaskEditDialog extends Component {
-    componentWillMount() {
-        this.setState({ task: this.props.task });
+    constructor(props) {
+        super(props);
+
+        this.handleDialogConfirm = this.handleDialogConfirm.bind(this);
+        this.handleDialogCancel = this.handleDialogCancel.bind(this);
+        this.handleSummaryChange = this.handleSummaryChange.bind(this);
+        this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleTimeChange = this.handleTimeChange.bind(this);
     }
 
-    handleDialogClose() {
-        this.props.onCloseDialog('test');
+    handleDialogConfirm() {
+        const date = this.state.date.toObject();
+        this.props.onCloseDialog({
+            summary: this.state.summary,
+            description: this.state.description,
+            due: new Date(
+                date.year,
+                date.month,
+                date.day,
+                date.hours,
+                date.minutes
+            ),
+            isDone: false
+        });
+    }
+
+    handleDialogCancel() {
+        this.props.onCloseDialog();
+    }
+
+    handleSummaryChange(event) {
+        this.setState({ summary: event.target.value });
+        console.log(this.state);
+    }
+
+    handleDescriptionChange(event) {
+        this.setState({ description: event.target.value });
+    }
+    
+    handleDateChange(event, date) {
+        this.setState({
+            date: this.state.date
+                .set('day', date.getDate())
+                .set('month', date.getMonth())
+                .set('year', date.getFullYear())
+         });
+    }
+
+    handleTimeChange(event, date) {
+        this.setState({
+            date: this.state.date
+                .set('hours', date.getHours())
+                .set('minutes', date.getMinutes())
+        });
+    }
+
+    componentWillMount() {
+        const date = new Date();
+        this.setState({
+            date: new Map({
+                hours: date.getHours(),
+                minutes: date.getMinutes(),
+                day: date.getDate(),
+                month: date.getMonth(),
+                year: date.getFullYear()
+            })
+        });
     }
 
     render() {
-        const task = this.state.task;
+        const task = this.props.task;
         const options = task ? {
             buttonLabel: 'Edit',
             dialogTitle: 'Edit Task'
@@ -28,7 +91,7 @@ class TaskEditDialog extends Component {
             <FlatButton
                 label={ options.buttonLabel }
                 primary={ true }
-                onTouchTap={ this.handleDialogClose }
+                onTouchTap={ this.handleDialogConfirm }
             />
         );
 
@@ -36,7 +99,7 @@ class TaskEditDialog extends Component {
             <FlatButton
                 label={ 'Cancel' }
                 secondary={ true }
-                onTouchTap={ this.props.onCloseDialog }
+                onTouchTap={ this.handleDialogCancel }
             />
         );
 
@@ -53,6 +116,7 @@ class TaskEditDialog extends Component {
                     floatingLabelText="Summary"
                     fullWidth={ true }
                     defaultValue={ task ? task.summary : '' }
+                    onChange={ this.handleSummaryChange }
                 />
                 <TextField
                     floatingLabelText="Description"
@@ -60,6 +124,7 @@ class TaskEditDialog extends Component {
                     rowsMax={ 4 }
                     fullWidth={ true }
                     defaultValue={ task ? task.description : '' }
+                    onChange={ this.handleDescriptionChange }
 
                 />
                 <DatePicker
@@ -76,12 +141,14 @@ class TaskEditDialog extends Component {
                         }).format
                     }
                     defaultDate={ task ? new Date(task.due) : new Date() }
+                    onChange={ this.handleDateChange }
                 />
                 <TimePicker
                     mode={ 'landscape' }
                     floatingLabelText={ 'Due hour' }
                     format={ '24hr' }
                     defaultTime={ task ? new Date(task.due) : new Date() }
+                    onChange={ this.handleTimeChange }
                 />
             </Dialog>
         );

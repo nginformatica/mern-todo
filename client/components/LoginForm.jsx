@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import connector from '../connector';
@@ -36,6 +37,13 @@ class LoginForm extends Component {
             email: '',
             password: ''
         });
+    }
+
+    componentDidUpdate() {
+        const response = this.props.loginResponse;
+        if (response && response.fulfilled) {
+            browserHistory.push('/tasks');
+        }
     }
 
     render() {

@@ -33,8 +33,8 @@ class TaskList extends Component {
 
     handleAfterTaskRemoval() {
         const response = this.props.removeTaskResponse;
-        if (response.isSettled && this.state.toRemove) {
-            if (response.isFulfilled) {
+        if (response.settled && this.state.toRemove) {
+            if (response.fulfilled) {
                 // TODO spawn a success toast, or anything else
                 this.setState({ toRemove: null });
             } else {
@@ -52,8 +52,9 @@ class TaskList extends Component {
 
     handleAfterTaskCreation(task) {
         if (task) {
-            // TODO implement
-            console.log(task);
+            this.setState({
+                tasks: this.state.tasks.concat([[task._id, task]])
+            });
         }
         this.setState({ creatingTask: false });
     }
@@ -61,12 +62,13 @@ class TaskList extends Component {
     componentWillMount() {
         this.setState({
             tasks: this.state.tasks.concat(
-                this.props.tasks.map((task, key) => [key, task])
+                this.props.tasks.map(task => [task._id, task])
             )
         });
     }
 
     render() {
+        console.log(this.state.tasks);
         if (this.props.removeTaskResponse) {
             this.handleAfterTaskRemoval();
         }
