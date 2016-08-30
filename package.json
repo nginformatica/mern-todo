@@ -66,9 +66,6 @@
     "extends": "xo-react",
     "esnext": true,
     "space": 4,
-    "globals": [
-      "document"
-    ],
     "rules": {
       "react/require-optimization": [
         "off"
@@ -97,11 +94,20 @@
       "babel/object-curly-spacing": [
         "error",
         "always"
-      ],
-      "xo/filename-case": [
-        "off"
       ]
-    }
+    },
+    "overrides": [{
+      "files": "client/**/*.jsx",
+      "globals": [
+        "document"
+      ],
+      "rules": {
+        "xo/filename-case": [
+          "error",
+          { "case": "pascalCase" }
+        ]
+      }
+    }]
   },
   "babel": {
     "presets": [

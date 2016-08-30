@@ -89,7 +89,7 @@ class TaskEditDialog extends Component {
 }
 
 TaskEditDialog.propTypes = {
-    task: propTypes.task.isRequired,
+    task: propTypes.task,
     onCloseDialog: React.PropTypes.func.isRequired,
     open: React.PropTypes.bool.isRequired
 };

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import AppTheme from '../materialTheme';
+import AppTheme from '../material-theme';
 
 injectTapEventPlugin();
 

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { List } from 'material-ui/List';
+import { List as MList } from 'material-ui/List';
 import { PromiseState } from 'react-refetch';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import connector from '../connector';
-import * as propTypes from '../prop-types';
 import Task from './Task';
 import TaskEditDialog from './TaskEditDialog';
 
@@ -29,6 +28,22 @@ class TaskList extends Component {
             }),
             toRemove: task
         });
+        this.props.removeTask(task._id);
+    }
+
+    handleAfterTaskRemoval() {
+        const response = this.props.removeTaskResponse;
+        if (response.isSettled && this.state.toRemove) {
+            if (response.isFulfilled) {
+                // TODO spawn a success toast, or anything else
+                this.setState({ toRemove: null });
+            } else {
+                this.setState({
+                    tasks: this.state.tasks.concat(this.state.toRemove),
+                    toRemove: null
+                });
+            }
+        }
     }
 
     handleTaskCreation() {
@@ -52,6 +67,10 @@ class TaskList extends Component {
     }
 
     render() {
+        if (this.props.removeTaskResponse) {
+            this.handleAfterTaskRemoval();
+        }
+
         const tasks = this.state.tasks.map((task, key) => {
             return (
                 <Task
@@ -63,7 +82,7 @@ class TaskList extends Component {
         });
 
         return (
-            <List className="login-form">
+            <MList className="login-form">
                 <TaskEditDialog
                     open={ this.state.creatingTask }
                     onCloseDialog={ this.handleAfterTaskCreation }
@@ -76,13 +95,13 @@ class TaskList extends Component {
                     secondary={ true }
                     onTouchTap={ this.handleTaskCreation }
                 />
-            </List>
+            </MList>
         );
     }
 }
 
 TaskList.propTypes = {
-    tasks: React.PropTypes.arrayOf(propTypes.task),
+    tasks: React.PropTypes.instanceOf(List),
     removeTask: React.PropTypes.func.isRequired,
     removeTaskResponse: React.PropTypes.instanceOf(PromiseState)
 };

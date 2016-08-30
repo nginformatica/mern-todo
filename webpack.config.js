@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: ['babel-polyfill', 'whatwg-fetch', './client/index.jsx'],
+    entry: ['babel-polyfill', 'whatwg-fetch', './client/Index.jsx'],
     output: {
         path: path.join(__dirname, 'dist/public'),
         filename: 'index.js'

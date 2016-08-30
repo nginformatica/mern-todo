@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import loginConnector from './LoginConnector';
+import connector from '../connector';
 
 class LoginForm extends Component {
 
@@ -27,7 +27,7 @@ class LoginForm extends Component {
 
     getError(response) {
         return response && response.rejected
-            ? response.reason
+            ? 'Invalid e-mail or password!'
             : '';
     }
 
@@ -76,7 +76,7 @@ LoginForm.propTypes = {
     loginResponse: React.PropTypes.object
 };
 
-export default loginConnector(() => {
+export default connector(() => {
     return {
         login: userLogin => ({
             loginResponse: {
