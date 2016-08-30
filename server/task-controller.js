@@ -39,8 +39,8 @@ export function save(request, response) {
     const task = request.body;
     task.owner = request.user._id;
     new TaskModel(task).save()
-        .then(() => {
-            response.status(201).send({ message: 'Task saved!' });
+        .then(task => {
+            response.status(201).send({ id: task._id });
         }, error => {
             response.status(400).send({ message: error.toString() });
         });

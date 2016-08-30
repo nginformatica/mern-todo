@@ -14,14 +14,14 @@ class TaskList extends Component {
 
         this.state = {
             tasks: new Map(),
-            creatingTask: false
+            creationDialogIsOpen: false
         };
 
-        this.handleTaskCreation = this.handleTaskCreation.bind(this);
-        this.handleAfterTaskCreation = this.handleAfterTaskCreation.bind(this);
+        this.handleCreationDialog = this.handleCreationDialog.bind(this);
+        this.handleCreation = this.handleCreation.bind(this);
     }
 
-    handleTaskRemoval(task) {
+    handleRemoval(task) {
         this.setState({
             tasks: this.state.tasks.filterNot(currentTask => {
                 return currentTask._id === task._id;
@@ -31,9 +31,9 @@ class TaskList extends Component {
         this.props.removeTask(task._id);
     }
 
-    handleAfterTaskRemoval() {
+    handleRemovalResponse() {
         const response = this.props.removeTaskResponse;
-        if (response.settled && this.state.toRemove) {
+        if (response && response.settled && this.state.toRemove) {
             if (response.fulfilled) {
                 // TODO spawn a success toast, or anything else
                 this.setState({ toRemove: null });
@@ -46,17 +46,30 @@ class TaskList extends Component {
         }
     }
 
-    handleTaskCreation() {
-        this.setState({ creatingTask: true });
+    handleCreationDialog() {
+        this.setState({ creationDialogIsOpen: true });
     }
 
-    handleAfterTaskCreation(task) {
+    handleCreation(task) {
         if (task) {
+            this.props.createTask(task);
+            this.setState({ toCreate: task });
+        }
+        this.setState({ creationDialogIsOpen: false });
+    }
+
+    handleCreationResponse() {
+        const response = this.props.createTaskResponse;
+        if (response && response.settled && this.state.toCreate) {
+            const createdTask = this.state.toCreate;
+            createdTask._id = JSON.parse(response.value);
             this.setState({
-                tasks: this.state.tasks.concat([[task._id, task]])
+                tasks: this.state.tasks.concat(
+                    [[createdTask._id, createdTask]]
+                ),
+                toCreate: null
             });
         }
-        this.setState({ creatingTask: false });
     }
 
     componentWillMount() {
@@ -68,17 +81,15 @@ class TaskList extends Component {
     }
 
     render() {
-        console.log(this.state.tasks);
-        if (this.props.removeTaskResponse) {
-            this.handleAfterTaskRemoval();
-        }
+        this.handleRemovalResponse();
+        this.handleCreationResponse();
 
         const tasks = this.state.tasks.map((task, key) => {
             return (
                 <Task
                     task={ task }
                     key={ key }
-                    onDelete={ this.handleTaskRemoval.bind(this, task) }
+                    onDelete={ this.handleRemoval.bind(this, task) }
                 />
             );
         });
@@ -86,8 +97,8 @@ class TaskList extends Component {
         return (
             <MList className="login-form">
                 <TaskEditDialog
-                    open={ this.state.creatingTask }
-                    onCloseDialog={ this.handleAfterTaskCreation }
+                    open={ this.state.creationDialogIsOpen }
+                    onCloseDialog={ this.handleCreation }
                 />
                 <Subheader>Tasks</Subheader>
                 { tasks }
@@ -95,7 +106,7 @@ class TaskList extends Component {
                     className="login-button"
                     label="New task"
                     secondary={ true }
-                    onTouchTap={ this.handleTaskCreation }
+                    onTouchTap={ this.handleCreationDialog }
                 />
             </MList>
         );
@@ -114,6 +125,13 @@ export default connector(() => {
             removeTaskResponse: {
                 url: 'api/tasks/'.concat(taskId),
                 method: 'DELETE'
+            }
+        }),
+        createTask: task => ({
+            createTaskResponse: {
+                url: 'api/tasks',
+                method: 'POST',
+                body: JSON.stringify(task)
             }
         })
     };
