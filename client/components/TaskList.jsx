@@ -53,9 +53,13 @@ class TaskList extends Component {
     handleCreation(task) {
         if (task) {
             this.props.createTask(task);
-            this.setState({ toCreate: task });
+            this.setState({
+                toCreate: task,
+                creationDialogIsOpen: false
+            });
+        } else {
+            this.setState({ creationDialogIsOpen: false });
         }
-        this.setState({ creationDialogIsOpen: false });
     }
 
     handleCreationResponse() {
@@ -120,7 +124,9 @@ class TaskList extends Component {
 TaskList.propTypes = {
     tasks: React.PropTypes.instanceOf(List),
     removeTask: React.PropTypes.func.isRequired,
-    removeTaskResponse: React.PropTypes.instanceOf(PromiseState)
+    removeTaskResponse: React.PropTypes.instanceOf(PromiseState),
+    createTask: React.PropTypes.func.isRequired,
+    createTaskResponse: React.PropTypes.instanceOf(PromiseState)
 };
 
 export default connector(() => {

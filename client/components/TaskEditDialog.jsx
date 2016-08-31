@@ -30,8 +30,8 @@ class TaskEditDialog extends Component {
                 date.day,
                 date.hours,
                 date.minutes
-            ),
-            isDone: false
+            ).toISOString(),
+            isDone: this.props.task ? this.props.task.isDone : false
         });
     }
 
@@ -41,20 +41,19 @@ class TaskEditDialog extends Component {
 
     handleSummaryChange(event) {
         this.setState({ summary: event.target.value });
-        console.log(this.state);
     }
 
     handleDescriptionChange(event) {
         this.setState({ description: event.target.value });
     }
-    
+
     handleDateChange(event, date) {
         this.setState({
             date: this.state.date
                 .set('day', date.getDate())
                 .set('month', date.getMonth())
                 .set('year', date.getFullYear())
-         });
+        });
     }
 
     handleTimeChange(event, date) {
@@ -66,8 +65,11 @@ class TaskEditDialog extends Component {
     }
 
     componentWillMount() {
-        const date = new Date();
+        const task = this.props.task;
+        const date = task ? new Date(task.due) : new Date();
         this.setState({
+            summary: task ? task.summary : '',
+            description: task ? task.description : '',
             date: new Map({
                 hours: date.getHours(),
                 minutes: date.getMinutes(),

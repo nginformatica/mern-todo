@@ -13,14 +13,14 @@ class Task extends Component {
     constructor(props) {
         super(props);
 
-        this.handleTaskEdition = this.handleTaskEdition.bind(this);
-        this.handleAfterTaskEdition = this.handleAfterTaskEdition.bind(this);
+        this.handleEditionDialog = this.handleEditionDialog.bind(this);
+        this.handleEdition = this.handleEdition.bind(this);
     }
 
     getOptions() {
         return {
             onDelete: this.props.onDelete,
-            onEdit: this.handleTaskEdition,
+            onEdit: this.handleEditionDialog,
             onToggleDone: this.onToggleDone.bind(this),
             isDone: this.state.task.get('isDone')
         };
@@ -30,26 +30,41 @@ class Task extends Component {
         const updatedTask = this.state.task
             .set('isDone', !this.state.task.get('isDone'));
         this.props.updateTask(updatedTask);
-        this.setState({ updatedTask });
+        this.setState({
+            task: updatedTask,
+            oldTask: this.state.task
+        });
     }
 
-    handleTaskEdition() {
-        this.setState({ editingTask: true });
+    handleEditionDialog() {
+        this.setState({ editionDialogIsOpen: true });
     }
 
-    handleAfterTaskEdition() {
-        this.setState({ editingTask: false });
+    handleEdition(task) {
+        if (task) {
+            task._id = this.props.task._id;
+            this.props.updateTask(task);
+            this.setState({
+                task: new Map(task),
+                oldTask: this.state.task,
+                editionDialogIsOpen: false
+            });
+        } else {
+            this.setState({ editionDialogIsOpen: false });
+        }
     }
 
-    handleTaskUpdate(response) {
-        if (response && this.state.updatedTask) {
+    handleEditionResponse(response) {
+        if (response && response.settled && this.state.oldTask) {
             if (response.fulfilled) {
                 this.setState({
-                    task: this.state.updatedTask,
-                    updatedTask: null
+                    oldTask: null
                 });
-            } else if (response.rejected) {
-                this.setState({ updatedTask: null });
+            } else {
+                this.setState({
+                    task: this.state.oldTask,
+                    oldTask: null
+                });
             }
         }
     }
@@ -57,20 +72,20 @@ class Task extends Component {
     componentWillMount() {
         this.setState({
             task: new Map(this.props.task),
-            editingTask: false
+            editionDialogIsOpen: false
         });
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.handleTaskUpdate(nextProps.updateTaskResponse);
+    componentWillReceiveProps(props) {
+        this.handleEditionResponse(props.updateTaskResponse);
     }
 
-    renderDescription() {
-        if (this.props.task.description) {
+    renderDescription(description) {
+        if (description) {
             return (
                 <span className="description">
                     { ' • ' }
-                    { this.props.task.description }
+                    { description }
                 </span>
             );
         }
@@ -78,10 +93,11 @@ class Task extends Component {
     }
 
     render() {
-        const dueDate = Date.parse(this.props.task.due);
+        const task = this.state.task.toObject();
+        const dueDate = Date.parse(task.due);
         const prettyDate = dateFormat(dueDate, 'dddd, dd/mm/yy HH:MM');
         const dateClass = dueDate < Date.now() ? 'date-late' : 'date-default';
-        const description = this.renderDescription();
+        const description = this.renderDescription(task.description);
 
         const secondaryText = (
             <span>
@@ -93,20 +109,20 @@ class Task extends Component {
             </span>
         );
 
-        const taskIcon = this.state.task.get('isDone')
+        const taskIcon = task.isDone
             ? (<Check color={ green500 }/>)
             : (<Check color={ grey400 }/>);
 
         return (
             <div>
                 <TaskEditDialog
-                    open={ this.state.editingTask }
-                    task={ this.state.task.toObject() }
-                    onCloseDialog={ this.handleAfterTaskEdition }
+                    open={ this.state.editionDialogIsOpen }
+                    task={ task }
+                    onCloseDialog={ this.handleEdition }
                 />
                 <ListItem
                     leftIcon={ taskIcon }
-                    primaryText={ this.props.task.summary }
+                    primaryText={ task.summary }
                     secondaryText={ secondaryText }
                     secondaryTextLines={ 2 }
                     rightIconButton={
@@ -130,7 +146,7 @@ export default connector(() => {
             updateTaskResponse: {
                 url: 'api/tasks',
                 method: 'PUT',
-                body: JSON.stringify(task.toObject())
+                body: JSON.stringify(task)
             }
         })
     };
