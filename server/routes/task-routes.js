@@ -1,6 +1,6 @@
 import express from 'express';
 import { authenticatedMiddleware } from '../auth';
-import * as tasks from '../task-controller';
+import * as tasks from '../controller/task-controller';
 
 export function getRoutes() {
     const router = new express.Router();

@@ -1,4 +1,4 @@
-import UserModel from './model/user';
+import UserModel from '../model/user';
 
 export function create(user, response) {
     user.created = Date.now();
