@@ -9,7 +9,7 @@
     "build:server": "babel ./server -d ./dist",
     "build": "npm run build:server && npm run build:client",
     "production": "node ./dist/server.js",
-    "test": "mocha --compilers js:babel-core/register --recursive",
+    "test:server": "mocha --compilers js:babel-core/register --require ./test/helper.js --recursive",
     "lint": "xo",
     "clean": "rm -rf node_modules"
   },
@@ -54,6 +54,7 @@
     "babel-preset-react": "~6.11.1",
     "babel-preset-stage-2": "~6.13.0",
     "chai": "^3.5.0",
+    "chai-immutable": "^1.6.0",
     "eslint": "~3.4.0",
     "eslint-config-xo": "~0.15.4",
     "eslint-config-xo-react": "~0.9.0",

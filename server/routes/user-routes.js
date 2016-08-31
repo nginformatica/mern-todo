@@ -4,9 +4,7 @@ import * as users from '../controller/user-controller';
 export function getRoutes() {
     const router = new express.Router();
 
-    router.post('/', (req, res) => {
-        users.create(req.body, res);
-    });
+    router.post('/', (req, res) => users.create(req.body, res));
 
     return router;
 }
