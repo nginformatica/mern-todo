@@ -1,5 +1,5 @@
 
-export default function call(endpoint, method = 'GET', body) {
+export default function request(endpoint, method = 'GET', body) {
     return fetch('api/' + endpoint, {
         headers: { 'Content-Type': 'application/json' },
         method,
