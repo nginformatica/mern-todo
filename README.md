@@ -11,14 +11,17 @@ npm install
 npm run build
 npm run start
 ```
-Now it should be listening in http://localhost:8000 by default.
+Now it should be listening in `http://localhost:8000` by default.
 
-### What am I using?
+### What are we using?
 - **MongoDB** *via Mongoose*: data storage
 - **Express** *with body-parser & morgan*: RESTful API
 - **BlueBird** because promises are awesome
 - **Passport**: user authentication
 - **Xo** to keep the code clean
 - **Babel**: cutting-edge features of ECMAScript 6
+- **React** to build reusable components
+- **Immutable-js**: to handle with immutable data
+- **Material-Ui**: good-looking material design components, in react!
 
 *Work in progress*! there is a lot of good stuff to put in this list.
