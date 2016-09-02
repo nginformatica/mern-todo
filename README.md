@@ -1,4 +1,6 @@
-## To-Do Node.js application
+# To-Do Node.js application
+![App Screenshot](https://github.com/nginformatica/mern-todo/raw/master/screenshot.png "App Screenshot")
+
 This is a simple example of a Node.js application using the MERN stack (like MEAN, but using React instead).
 
 **Why a To-Do application?**
