@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { List as MList } from 'material-ui/List';
-import { PromiseState } from 'react-refetch';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Map, List } from 'immutable';
-import connector from '../connector';
+import { List } from 'immutable';
+import { removeTaskRequest } from '../actions';
 import Task from './Task';
 import TaskEditDialog from './TaskEditDialog';
 
@@ -12,38 +12,18 @@ class TaskList extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            tasks: new Map(),
-            creationDialogIsOpen: false
-        };
-
         this.handleCreationDialog = this.handleCreationDialog.bind(this);
         this.handleCreation = this.handleCreation.bind(this);
     }
 
-    handleRemoval(task) {
+    componentWillMount() {
         this.setState({
-            tasks: this.state.tasks.filterNot(currentTask => {
-                return currentTask._id === task._id;
-            }),
-            toRemove: task
+            creationDialogIsOpen: false
         });
-        this.props.removeTask(task._id);
     }
 
-    handleRemovalResponse() {
-        const response = this.props.removeTaskResponse;
-        if (response && response.settled && this.state.toRemove) {
-            if (response.fulfilled) {
-                // TODO spawn a success toast, or anything else
-                this.setState({ toRemove: null });
-            } else {
-                this.setState({
-                    tasks: this.state.tasks.concat(this.state.toRemove),
-                    toRemove: null
-                });
-            }
-        }
+    handleRemoval(task) {
+        this.props.dispatch(removeTaskRequest(task._id));
     }
 
     handleCreationDialog() {
@@ -51,52 +31,15 @@ class TaskList extends Component {
     }
 
     handleCreation(task) {
-        if (task) {
-            this.props.createTask(task);
-            this.setState({
-                toCreate: task,
-                creationDialogIsOpen: false
-            });
-        } else {
-            this.setState({ creationDialogIsOpen: false });
-        }
-    }
-
-    handleCreationResponse() {
-        const response = this.props.createTaskResponse;
-        if (response && response.settled && this.state.toCreate) {
-            if (response.fulfilled) {
-                const createdTask = this.state.toCreate;
-                createdTask._id = JSON.parse(response.value).id;
-                this.setState({
-                    tasks: this.state.tasks.concat(
-                        [[createdTask._id, createdTask]]
-                    ),
-                    toCreate: null
-                });
-            } else {
-                // TODO show a error message
-            }
-        }
-    }
-
-    componentWillMount() {
-        this.setState({
-            tasks: this.state.tasks.concat(
-                this.props.tasks.map(task => [task._id, task])
-            )
-        });
+        // TODO
     }
 
     render() {
-        this.handleRemovalResponse();
-        this.handleCreationResponse();
-
-        const tasks = this.state.tasks.map((task, key) => {
+        const tasks = this.props.tasks.map(task => {
             return (
                 <Task
                     task={ task }
-                    key={ key }
+                    key={ task._id }
                     onDelete={ this.handleRemoval.bind(this, task) }
                 />
             );
@@ -123,26 +66,7 @@ class TaskList extends Component {
 
 TaskList.propTypes = {
     tasks: React.PropTypes.instanceOf(List),
-    removeTask: React.PropTypes.func.isRequired,
-    removeTaskResponse: React.PropTypes.instanceOf(PromiseState),
-    createTask: React.PropTypes.func.isRequired,
-    createTaskResponse: React.PropTypes.instanceOf(PromiseState)
+    dispatch: React.PropTypes.func.isRequired
 };
 
-export default connector(() => {
-    return {
-        removeTask: taskId => ({
-            removeTaskResponse: {
-                url: 'api/tasks/'.concat(taskId),
-                method: 'DELETE'
-            }
-        }),
-        createTask: task => ({
-            createTaskResponse: {
-                url: 'api/tasks',
-                method: 'POST',
-                body: JSON.stringify(task)
-            }
-        })
-    };
-})(TaskList);
+export default connect()(TaskList);

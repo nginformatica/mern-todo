@@ -3,11 +3,13 @@ export default function request(endpoint, method = 'GET', body) {
     return fetch('api/' + endpoint, {
         headers: { 'Content-Type': 'application/json' },
         method,
-        body: JSON.stringify(body)
+        body: body ? JSON.stringify(body) : null,
+        mode: 'cors',
+        credentials: 'include'
     })
     .then(response => {
         return {
-            body: response.json().catch(() => response.text()),
+            body: response.text(),
             response
         };
     })

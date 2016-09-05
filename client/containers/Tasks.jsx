@@ -1,33 +1,35 @@
 import React, { Component } from 'react';
-import { connect, PromiseState } from 'react-refetch';
+import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import { List } from 'immutable';
+import { fetchTasks } from '../actions';
 import TodoBar from '../components/TodoBar';
 import TaskList from '../components/TaskList';
 
 class Tasks extends Component {
-    render() {
-        let tasks;
-        this.props.tasksFetch.then(fetchedTasks => {
-            tasks = new List(fetchedTasks);
-        });
+    componentDidMount() {
+        this.props.dispatch(fetchTasks());
+    }
 
-        if (this.props.tasksFetch.fulfilled) {
-            return (
-                <Paper zDepth={ 3 } className="tasks-paper">
-                    <TodoBar/>
-                    <TaskList tasks={ tasks }/>
-                </Paper>
-            );
-        }
-        return <h1>Loading...</h1>;
+    render() {
+        return (
+            <Paper zDepth={ 3 } className="tasks-paper">
+                <TodoBar/>
+                <TaskList tasks={ this.props.tasks }/>
+            </Paper>
+        );
     }
 }
 
+function mapStateToProps(state) {
+    return {
+        tasks: state.tasks
+    };
+}
+
 Tasks.propTypes = {
-    tasksFetch: React.PropTypes.instanceOf(PromiseState).isRequired
+    tasks: React.PropTypes.instanceOf(List).isRequired,
+    dispatch: React.PropTypes.func.isRequired
 };
 
-export default connect(() => {
-    return { tasksFetch: '/api/tasks' };
-})(Tasks);
+export default connect(mapStateToProps)(Tasks);
