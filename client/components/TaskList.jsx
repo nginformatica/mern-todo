@@ -4,7 +4,7 @@ import { List as MList } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
 import { List } from 'immutable';
-import { removeTaskRequest } from '../actions';
+import { removeTaskRequest, addTaskRequest } from '../actions';
 import Task from './Task';
 import TaskEditDialog from './TaskEditDialog';
 
@@ -17,9 +17,7 @@ class TaskList extends Component {
     }
 
     componentWillMount() {
-        this.setState({
-            creationDialogIsOpen: false
-        });
+        this.setState({ creationDialogIsOpen: false });
     }
 
     handleRemoval(task) {
@@ -31,7 +29,10 @@ class TaskList extends Component {
     }
 
     handleCreation(task) {
-        // TODO
+        if (task) {
+            this.props.dispatch(addTaskRequest(task));
+        }
+        this.setState({ creationDialogIsOpen: false });
     }
 
     render() {

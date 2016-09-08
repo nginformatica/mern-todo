@@ -1,4 +1,4 @@
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 import request from './api';
 
 export const ADD_TASK = 'ADD_TASK';
@@ -8,9 +8,11 @@ export const FETCH_TASKS = 'FETCH_TASKS';
 
 export function addTaskRequest(task) {
     return dispatch => {
-        return request('tasks', 'POST', task.toObject())
+        return request('tasks', 'POST', task)
             .then(response => {
-                return dispatch(addTask(task.set('_id', response.id)));
+                const task2 = task;
+                task2._id = JSON.parse(response).id;
+                return dispatch(addTask(task2));
             });
     };
 }
