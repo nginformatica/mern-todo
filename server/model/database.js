@@ -1,22 +1,24 @@
 import mongodb from 'mongoose';
 import bluebird from 'bluebird';
-import config from '../config';
+import config from 'config';
 
 export function connect() {
+    const mongoUri = config.get('mongoUri');
+
     mongodb.Promise = bluebird;
 
-    mongodb.connect(config.mongoUri);
+    mongodb.connect(mongoUri);
 
     mongodb.connection.on('connected', () => {
-        console.log('Connected successfully to ' + config.mongoUri);
+        console.log('Connected successfully to ' + mongoUri);
     });
 
     mongodb.connection.on('error', () => {
-        console.log('Failed to connect to ' + config.mongoUri);
+        console.log('Failed to connect to ' + mongoUri);
     });
 
     mongodb.connection.on('disconnected', () => {
-        console.log('Disconnected from ' + config.mongoUri);
+        console.log('Disconnected from ' + mongoUri);
     });
 
     process.on('SIGINT', () => {

@@ -4,10 +4,13 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import session from 'express-session';
+import config from 'config';
 import * as database from './model/database';
 import * as api from './routes/api';
-import config from './config';
 import * as auth from './auth';
+
+const port = config.get('port');
+const sessionSecret = config.get('sessionSecret');
 
 const app = express();
 
@@ -21,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(session({
-    secret: config.sessionSecret,
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false
 }));
@@ -41,6 +44,6 @@ app.get('*', (req, res) => {
 });
 
 // Starting the server
-app.listen(config.port, () => {
-    console.log('Listening on port ' + config.port + '...');
+app.listen(port, () => {
+    console.log('Listening on port ' + port + '...');
 });

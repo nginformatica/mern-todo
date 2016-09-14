@@ -1,0 +1,5 @@
+{
+    "port": 8080,
+    "mongoUri": "mongodb://localhost:27017/todo-app",
+    "sessionSecret": "top secret"
+}

@@ -26,6 +26,7 @@
   "dependencies": {
     "bluebird": "^3.4.1",
     "body-parser": "^1.15.2",
+    "config": "^1.21.0",
     "connect-flash": "~0.1.1",
     "dateformat": "~1.0.12",
     "es6-promise": "~3.2.1",
@@ -56,6 +57,7 @@
     "babel-preset-react": "~6.11.1",
     "babel-preset-stage-2": "~6.13.0",
     "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
     "chai-immutable": "^1.6.0",
     "eslint": "~3.4.0",
     "eslint-config-xo": "~0.15.4",
