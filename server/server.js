@@ -1,11 +1,11 @@
-import * as path from 'path';
+import { join } from 'path';
 import express from 'express';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import session from 'express-session';
 import * as database from './model/database';
-import * as api from './api';
+import { getRoutes } from './api';
 import config from './config';
 import * as auth from './auth';
 
@@ -35,7 +35,7 @@ auth.initialize();
 app.use('/api', api.getRoutes());
 
 // Static font-end content
-app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(join(__dirname, '/public')));
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/index.html'));
 });

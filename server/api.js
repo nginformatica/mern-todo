@@ -1,13 +1,14 @@
 import express from 'express';
-import * as tasksApi from './routes/task';
-import * as usersApi from './routes/user';
-import * as authApi from './routes/auth';
+import { getRoutes as getTaskRoutes } from './routes/task';
+import { getRoutes as getUserRoutes } from './routes/user';
+import { getRoutes as getAuthRoutes } from './routes/auth';
 
 export function getRoutes() {
     const router = new express.Router();
-    router.use('/tasks/', tasksApi.getRoutes());
-    router.use('/users/', usersApi.getRoutes());
-    router.use('/auth/', authApi.getRoutes());
+
+    router.use('/tasks/', tasksApi.getTaskRoutes());
+    router.use('/users/', usersApi.getUserRoutes());
+    router.use('/auth/', authApi.getAuthRoutes());
 
     return router;
 }

@@ -1,11 +1,13 @@
 import express from 'express';
-import * as users from '../control/user';
+import { create } from '../control/user';
 
 export function getRoutes() {
     const router = new express.Router();
 
     router.post('/', (req, res) => {
-        users.create(req.body, res);
+        create(req.body)
+            .then(user => res.status(201).send(user))
+            .catch(err => res.status(401).send(err));
     });
 
     return router;
