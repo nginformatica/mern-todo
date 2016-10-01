@@ -1,7 +1,7 @@
 import express from 'express';
-import * as tasksApi from './task-routes';
-import * as usersApi from './user-routes';
-import * as authApi from './auth-routes';
+import * as tasksApi from './routes/task';
+import * as usersApi from './routes/user';
+import * as authApi from './routes/auth';
 
 export function getRoutes() {
     const router = new express.Router();

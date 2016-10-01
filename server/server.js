@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import passport from 'passport';
 import session from 'express-session';
 import * as database from './model/database';
-import * as api from './routes/api';
+import * as api from './api';
 import config from './config';
 import * as auth from './auth';
 
