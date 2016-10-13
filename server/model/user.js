@@ -7,6 +7,7 @@ export default mongodb.model('User', new mongodb.Schema({
     },
     email: {
         type: String,
+        unique: true,
         required: [true, 'E-mail is required!']
     },
     password: {
